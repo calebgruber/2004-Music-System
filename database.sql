@@ -1,6 +1,6 @@
 -- Database schema for 2004 Design Tech Music System
-CREATE DATABASE IF NOT EXISTS music_system CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE music_system;
+CREATE DATABASE IF NOT EXISTS voxelnodes_music_2004 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE voxelnodes_music_2004;
 
 -- Users table
 CREATE TABLE IF NOT EXISTS users (
