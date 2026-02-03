@@ -347,7 +347,13 @@ $isLoggedIn = User::isLoggedIn();
             tracks.forEach(track => {
                 const artists = track.artists.map(a => a.name).join(', ');
                 html += `
-                    <a href="#" class="list-group-item list-group-item-action" onclick="addSpotifyTrack(event, '${track.uri}', '${track.id}', '${escapeHtml(track.name)}', '${escapeHtml(artists)}', '${escapeHtml(track.album.name)}', ${track.duration_ms})">
+                    <a href="#" class="list-group-item list-group-item-action spotify-track-item" 
+                       data-uri="${escapeHtml(track.uri)}" 
+                       data-id="${escapeHtml(track.id)}" 
+                       data-name="${escapeHtml(track.name)}" 
+                       data-artists="${escapeHtml(artists)}" 
+                       data-album="${escapeHtml(track.album.name)}" 
+                       data-duration="${track.duration_ms}">
                         <div class="d-flex align-items-center">
                             ${track.album.images[2] ? `<img src="${track.album.images[2].url}" class="me-3" width="40" height="40">` : ''}
                             <div>
@@ -360,6 +366,21 @@ $isLoggedIn = User::isLoggedIn();
             });
             html += '</div>';
             resultsDiv.innerHTML = html;
+            
+            // Add event listeners to track items
+            document.querySelectorAll('.spotify-track-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    addSpotifyTrack(
+                        this.dataset.uri,
+                        this.dataset.id,
+                        this.dataset.name,
+                        this.dataset.artists,
+                        this.dataset.album,
+                        this.dataset.duration
+                    );
+                });
+            });
         }
 
         function escapeHtml(text) {
@@ -368,8 +389,7 @@ $isLoggedIn = User::isLoggedIn();
             return div.innerHTML;
         }
 
-        function addSpotifyTrack(e, uri, id, title, artist, album, duration) {
-            e.preventDefault();
+        function addSpotifyTrack(uri, id, title, artist, album, duration) {
             
             fetch('api/add_song.php', {
                 method: 'POST',

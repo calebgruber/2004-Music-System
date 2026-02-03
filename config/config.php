@@ -24,5 +24,5 @@ if (!session_id()) {
 }
 
 // Timezone
-date_default_timezone_set('America/Los_Angeles');
+date_default_timezone_set(getenv('TIMEZONE') ?: 'America/Los_Angeles');
 ?>

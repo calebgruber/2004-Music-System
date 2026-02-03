@@ -43,7 +43,7 @@ class User {
         $stmt = $db->prepare("INSERT INTO users (username, email) VALUES (?, ?)");
         $stmt->bind_param("ss", $username, $email);
         $stmt->execute();
-        return $db->lastInsertId();
+        return $db->getConnection()->insert_id;
     }
     
     public static function updateSpotifyTokens($userId, $accessToken, $refreshToken, $expiresIn) {
@@ -70,7 +70,11 @@ class User {
     }
     
     public static function logout() {
+        session_unset();
         session_destroy();
+        if (isset($_COOKIE[session_name()])) {
+            setcookie(session_name(), '', time() - 3600, '/');
+        }
     }
 }
 ?>

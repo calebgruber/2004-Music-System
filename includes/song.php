@@ -30,7 +30,7 @@ class Song {
     public static function add($title, $artist, $addedBy, $spotifyUri = null, $spotifyId = null, $album = null, $durationMs = null) {
         $db = getDB();
         $stmt = $db->prepare("INSERT INTO songs (title, artist, spotify_uri, spotify_id, album, duration_ms, added_by) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssiii", $title, $artist, $spotifyUri, $spotifyId, $album, $durationMs, $addedBy);
+        $stmt->bind_param("sssssii", $title, $artist, $spotifyUri, $spotifyId, $album, $durationMs, $addedBy);
         
         if ($stmt->execute()) {
             return $db->lastInsertId();
