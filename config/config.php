@@ -3,9 +3,9 @@
 
 // Database Configuration
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
-define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') ?: '');
-define('DB_NAME', getenv('DB_NAME') ?: 'music_system');
+define('DB_USER', getenv('DB_USER') ?: 'voxelnodes_music_2004');
+define('DB_PASS', getenv('DB_PASS') ?: 'o9pqI9Mz,0Hd');
+define('DB_NAME', getenv('DB_NAME') ?: 'voxelnodes_music_2004');
 
 // Spotify API Configuration
 define('SPOTIFY_CLIENT_ID', getenv('SPOTIFY_CLIENT_ID') ?: '');
