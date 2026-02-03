@@ -1,6 +1,5 @@
 # Environment files
 .env
-config/config.php
 
 # IDE files
 .vscode/
