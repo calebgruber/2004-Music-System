@@ -131,59 +131,32 @@ img { max-width: 100%; }
   z-index: 100;
 }
 
-/* Left breadcrumb area — collapses naturally */
+/* Left app identity area */
 .topbar-left {
   display: flex;
   align-items: center;
-  gap: 0.375rem;
+  gap: 0.5rem;
   flex: 1;
   min-width: 0;
 }
 
-.topbar-launcher {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 3px;
-  color: #94a3b8;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-decoration: none;
-  letter-spacing: 0.02em;
-  transition: background var(--transition), color var(--transition);
-  border: 1px solid rgba(255,255,255,0.07);
-}
-
-.topbar-launcher:hover {
-  background: rgba(255,255,255,0.06);
-  color: #e2e8f0;
-  text-decoration: none;
-}
-
-.topbar-launcher .material-symbols-outlined { font-size: 0.875rem; }
-
 .topbar-app {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  font-size: 0.8125rem;
+  gap: 0.45rem;
+  font-size: 0.875rem;
   font-weight: 700;
   color: #f8fafc;
   letter-spacing: -0.01em;
-  margin-left: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
 }
 
 .topbar-app .material-symbols-outlined {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--sidebar-accent);
-}
-
-.topbar-sep {
-  color: #334155;
-  font-size: 0.875rem;
-  margin: 0 0.125rem;
-  user-select: none;
 }
 
 .topbar-right {
@@ -197,38 +170,57 @@ img { max-width: 100%; }
 .topbar-user {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.55rem;
   font-size: 0.75rem;
   color: #94a3b8;
+  padding: 0.25rem 0.55rem 0.25rem 0.3rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: linear-gradient(90deg, rgba(59,130,246,0.16) 0%, rgba(59,130,246,0.05) 100%);
 }
 
 .topbar-username {
   font-size: 0.75rem;
-  font-weight: 500;
-  color: #cbd5e1;
-  max-width: 120px;
+  font-weight: 700;
+  color: #e2e8f0;
+  max-width: 140px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.topbar-user-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.15;
+}
+
+.topbar-user-role {
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
 @media (max-width: 640px) {
-  .topbar-username { display: none; }
-  .topbar-launcher span.material-symbols-outlined + * { display: none; }
+  .topbar-user-meta { display: none; }
 }
 
 .topbar-avatar {
-  width: 1.625rem;
-  height: 1.625rem;
+  width: 1.9rem;
+  height: 1.9rem;
   border-radius: 50%;
-  background: var(--sidebar-accent);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.6875rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: white;
   flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.14);
 }
 
 .topbar-btn {
@@ -1314,11 +1306,6 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
       <span class="material-symbols-outlined">menu</span>
     </button>
     <div class="topbar-left">
-      <a href="#" class="topbar-launcher">
-        <span class="material-symbols-outlined">home</span>
-        Launcher
-      </a>
-      <span class="topbar-sep">›</span>
       <span class="topbar-app">
         <span class="material-symbols-outlined">dashboard</span>
         Universal UI Template
@@ -1326,12 +1313,18 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
     </div>
 
     <div class="topbar-right">
+      <button class="topbar-btn" title="Notifications">
+        <span class="material-symbols-outlined">notifications</span>
+      </button>
       <button id="theme-toggle" class="topbar-btn" title="Toggle theme">
         <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
       </button>
       <span class="topbar-user">
         <div class="topbar-avatar">UI</div>
-        <span class="topbar-username">Template User</span>
+        <span class="topbar-user-meta">
+          <span class="topbar-username">Template User</span>
+          <span class="topbar-user-role">Design Lead</span>
+        </span>
       </span>
       <a href="#" class="topbar-btn topbar-logout" title="Sign out">
         <span class="material-symbols-outlined">logout</span>
