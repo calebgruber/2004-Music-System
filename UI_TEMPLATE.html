@@ -95,21 +95,16 @@ html { height: 100%; }
 
 body {
   font-family: var(--font);
-  background:
-    radial-gradient(circle at top left, rgba(var(--primary-rgb), 0.14), transparent 26rem),
-    linear-gradient(180deg, #f3f8ff 0%, var(--bg) 18%, var(--bg) 100%);
+  background: var(--bg);
   color: var(--text);
   height: 100%;
   display: flex;
   min-height: 100vh;
   transition: background var(--transition), color var(--transition);
-  justify-content: flex-end;
 }
 
 [data-theme="dark"] body {
-  background:
-    radial-gradient(circle at top left, rgba(var(--primary-rgb), 0.16), transparent 26rem),
-    linear-gradient(180deg, #0f1930 0%, var(--bg) 20%, var(--bg) 100%);
+  background: var(--bg);
 }
 
 a { color: var(--text-link); text-decoration: none; }
@@ -119,7 +114,7 @@ img { max-width: 100%; }
 
 /* ── App shell ───────────────────────────────────── */
 .app {
-  display: flex;
+  display: block;
   width: 100%;
   min-height: 100vh;
   padding-top: 2.75rem; /* push below fixed topbar */
@@ -131,15 +126,16 @@ img { max-width: 100%; }
   top: 0;
   left: 0;
   right: 0;
-  height: 2.75rem;
+  min-height: 2.75rem;
   background: linear-gradient(90deg, #0b1530 0%, #142445 48%, #13203b 100%);
   border-bottom: 1px solid rgba(151,177,255,0.16);
   display: flex;
   align-items: center;
-  gap: 0;
-  padding: 0 0.75rem;
+  gap: 0.75rem;
+  padding: 0.25rem 0.75rem 0;
   z-index: 100;
   box-shadow: 0 10px 24px rgba(7, 15, 34, 0.28);
+  flex-wrap: wrap;
 }
 
 /* Left app identity area */
@@ -147,8 +143,8 @@ img { max-width: 100%; }
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex: 1;
   min-width: 0;
+  flex-shrink: 0;
 }
 
 .topbar-app {
@@ -170,12 +166,60 @@ img { max-width: 100%; }
   color: var(--sidebar-accent);
 }
 
+.topbar-nav {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.topbar-nav .nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.75rem 0.9rem 0.7rem;
+  color: #b7c6e0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-top: 3px solid transparent;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  margin-bottom: 0;
+  border-radius: 0;
+  background: rgba(79,111,255,0.03);
+  white-space: nowrap;
+}
+
+.topbar-nav .nav-item:hover {
+  background: rgba(79,111,255,0.08);
+  color: #f8fbff;
+}
+
+.topbar-nav .nav-item.active {
+  border-top-color: var(--primary);
+  background: rgba(79,111,255,0.1);
+  color: #f8fbff;
+  padding-left: 0.9rem;
+}
+
+[data-theme="dark"] .topbar-nav .nav-item.active {
+  border-top-color: rgba(var(--primary-rgb), 0.25);
+}
+
+.topbar-nav .nav-item .material-symbols-outlined {
+  font-size: 1rem;
+}
+
 .topbar-right {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   flex-shrink: 0;
-  margin-left: 0.5rem;
+  margin-left: auto;
+  padding-bottom: 0.25rem;
 }
 
 .topbar-user {
@@ -307,51 +351,6 @@ img { max-width: 100%; }
 }
 
 /* ── Sidebar ─────────────────────────────────────── */
-.sidebar {
-  width: var(--sidebar-width);
-  background: var(--sidebar-bg);
-  color: var(--sidebar-text);
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  position: sticky;
-  top: 2.75rem; /* align below fixed topbar */
-  height: calc(100vh - 2.75rem);
-  overflow-y: auto;
-  transition: width var(--transition);
-}
-
-.sidebar-header {
-  padding: 1.25rem 1rem 0.75rem;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
-.sidebar-header h2 {
-  font-size: 1.0625rem;
-  font-weight: 700;
-  color: #f8fafc;
-  letter-spacing: -0.02em;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.sidebar-header .app-logo {
-  font-size: 1.4rem;
-  color: var(--sidebar-accent);
-}
-
-.sidebar-section {
-  padding: 0.75rem 0.75rem 0.25rem;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #475569;
-}
-
-nav { padding: 0.5rem 0.5rem; flex: 1; }
-
 .nav-item {
   display: flex;
   align-items: center;
@@ -391,52 +390,6 @@ nav { padding: 0.5rem 0.5rem; flex: 1; }
   color: var(--sidebar-accent);
 }
 
-.sidebar-footer {
-  padding: 0.75rem;
-  border-top: 1px solid rgba(255,255,255,0.06);
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--radius);
-  cursor: pointer;
-}
-
-.user-info:hover { background: var(--sidebar-hover); }
-
-.user-avatar {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background: var(--sidebar-accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: white;
-  flex-shrink: 0;
-}
-
-.user-details { min-width: 0; }
-
-.user-name {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #f1f5f9;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.user-role {
-  font-size: 0.6875rem;
-  color: #64748b;
-}
-
 /* ── Main content area ───────────────────────────── */
 .content {
   flex: 1;
@@ -451,16 +404,14 @@ nav { padding: 0.5rem 0.5rem; flex: 1; }
   justify-content: space-between;
   padding: 1.75rem 2rem 1.5rem;
   border-bottom: 1px solid var(--border);
-  background:
-    linear-gradient(135deg, rgba(var(--primary-rgb), 0.1) 0%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,1) 100%);
+  background: var(--surface);
   gap: 1rem;
   flex-wrap: wrap;
   box-shadow: inset 0 -1px 0 rgba(var(--primary-rgb), 0.06);
 }
 
 [data-theme="dark"] .page-header {
-  background:
-    linear-gradient(135deg, rgba(var(--primary-rgb), 0.14) 0%, rgba(18,29,50,0.96) 52%, rgba(18,29,50,1) 100%);
+  background: var(--surface);
 }
 
 .page-header h1 {
@@ -724,7 +675,7 @@ nav { padding: 0.5rem 0.5rem; flex: 1; }
   box-shadow: 0 1px 0 rgba(255,255,255,0.75), 0 8px 18px rgba(27, 52, 98, 0.08);
 }
 
-.btn:hover { background: linear-gradient(180deg, #fafdff 0%, #eaf2ff 100%); text-decoration: none; box-shadow: 0 10px 22px rgba(27, 52, 98, 0.12); transform: translateY(-1px); }
+.btn:hover { background: linear-gradient(180deg, #fafdff 0%, #eaf2ff 100%); text-decoration: none; box-shadow: 0 10px 22px rgba(27, 52, 98, 0.12); }
 .btn .material-symbols-outlined { font-size: 1.0625rem; }
 
 .btn-primary   { background: linear-gradient(90deg, var(--primary) 0%, #6b8cff 100%);  border-color: rgba(79,111,255,0.65);  color: var(--primary-text); }
@@ -765,6 +716,15 @@ nav { padding: 0.5rem 0.5rem; flex: 1; }
 
 [data-theme="dark"] .color-picker-shell {
   background: linear-gradient(180deg, #18243d 0%, #13213a 100%);
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] input[type="file"].form-control,
+[data-theme="dark"] select.form-control,
+[data-theme="dark"] textarea.form-control {
+  background: linear-gradient(180deg, #18243d 0%, #13213a 100%);
+  color: var(--text);
+  border-color: var(--border);
 }
 
 /* ── Forms ───────────────────────────────────────── */
@@ -1265,29 +1225,28 @@ tr:hover td { background: var(--bg); }
 
 /* ── Responsive ──────────────────────────────────── */
 @media (max-width: 768px) {
-  .sidebar {
-    position: fixed;
-    top: 2.75rem;
-    z-index: 50;
-    transform: translateX(-100%);
-    transition: transform var(--transition);
-    height: calc(100vh - 2.75rem);
-  }
-  .sidebar.open { transform: translateX(0); }
-  .content { margin-left: 0; }
-
   .card-grid-3 { grid-template-columns: 1fr; }
   .form-row    { grid-template-columns: 1fr; }
   .schedule-grid { grid-template-columns: repeat(3, 1fr); }
 
   .page-header { padding: 1rem; }
   .page-body   { padding: 1rem; }
-
-  .topbar .mobile-menu-btn { display: inline-flex; }
+  .topbar {
+    padding-bottom: 0.25rem;
+  }
+  .topbar-left,
+  .topbar-nav,
+  .topbar-right {
+    width: 100%;
+  }
+  .topbar-right {
+    margin-left: 0;
+    justify-content: flex-end;
+  }
 }
 
 .mobile-menu-btn {
-  display: none;
+  display: none !important;
   background: none;
   border: none;
   cursor: pointer;
@@ -1307,7 +1266,7 @@ tr:hover td { background: var(--bg); }
   top: 0;
   left: 0;
   height: 3px;
-  width: 0%;
+  width: 42%;
   background:
     repeating-linear-gradient(
       135deg,
@@ -1322,19 +1281,12 @@ tr:hover td { background: var(--bg); }
   pointer-events: none;
   border-radius: 0 2px 2px 0;
   box-shadow: 0 0 8px rgba(59,130,246,0.5);
-  animation: pg-advance 8s cubic-bezier(0.08, 0.04, 0, 1) forwards, progress-stripes 1.1s linear infinite;
+  animation: none;
 }
 
 #page-loader.pg-done {
-  animation: none !important;
-  width: 100% !important;
   opacity: 0;
-  transition: width 150ms ease, opacity 400ms ease 150ms;
-}
-
-@keyframes pg-advance {
-  from { width: 0%; }
-  to   { width: 88%; }
+  transition: opacity 300ms ease;
 }
 
 /* ── Global content entrance animation ───────────── */
@@ -1428,15 +1380,28 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
 <div id="page-loader"></div>
 <div class="app">
   <div class="topbar">
-    <button id="mobile-menu-btn" class="topbar-btn mobile-menu-btn" title="Open menu" aria-label="Toggle navigation">
-      <span class="material-symbols-outlined">menu</span>
-    </button>
     <div class="topbar-left">
       <span class="topbar-app">
         <span class="material-symbols-outlined">dashboard</span>
         Universal UI Template
       </span>
     </div>
+
+    <nav class="topbar-nav" aria-label="Primary">
+      <a href="#overview" class="nav-item active"><span class="material-symbols-outlined">home</span>Overview</a>
+      <a href="#alerts" class="nav-item"><span class="material-symbols-outlined">notifications</span>Alerts</a>
+      <a href="#cards" class="nav-item"><span class="material-symbols-outlined">dashboard</span>Cards</a>
+      <a href="#buttons" class="nav-item"><span class="material-symbols-outlined">smart_button</span>Buttons</a>
+      <a href="#forms" class="nav-item"><span class="material-symbols-outlined">edit_note</span>Forms</a>
+      <a href="#tables" class="nav-item"><span class="material-symbols-outlined">table</span>Tables</a>
+      <a href="#tabs" class="nav-item"><span class="material-symbols-outlined">tab</span>Tabs</a>
+      <a href="#stats" class="nav-item"><span class="material-symbols-outlined">query_stats</span>Stats</a>
+      <a href="#apps" class="nav-item"><span class="material-symbols-outlined">apps</span>App Tiles</a>
+      <a href="#schedule" class="nav-item"><span class="material-symbols-outlined">calendar_month</span>Schedule</a>
+      <a href="#empty" class="nav-item"><span class="material-symbols-outlined">inbox</span>Empty States</a>
+      <a href="#login" class="nav-item"><span class="material-symbols-outlined">login</span>Login Layout</a>
+      <a href="#extras" class="nav-item"><span class="material-symbols-outlined">extension</span>Extras</a>
+    </nav>
 
     <div class="topbar-right">
       <button class="topbar-btn" title="Notifications">
@@ -1458,44 +1423,6 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
       </a>
     </div>
   </div>
-
-  <div id="sidebar-overlay" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:49;top:2.75rem;"></div>
-
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <h2>
-        <span class="material-symbols-outlined app-logo">widgets</span>
-        UI Library
-      </h2>
-    </div>
-
-    <nav>
-      <div class="sidebar-section">Core</div>
-      <a href="#overview" class="nav-item active"><span class="material-symbols-outlined">home</span>Overview</a>
-      <a href="#alerts" class="nav-item"><span class="material-symbols-outlined">notifications</span>Alerts</a>
-      <a href="#cards" class="nav-item"><span class="material-symbols-outlined">dashboard</span>Cards</a>
-      <a href="#buttons" class="nav-item"><span class="material-symbols-outlined">smart_button</span>Buttons</a>
-      <a href="#forms" class="nav-item"><span class="material-symbols-outlined">edit_note</span>Forms</a>
-      <a href="#tables" class="nav-item"><span class="material-symbols-outlined">table</span>Tables</a>
-      <a href="#tabs" class="nav-item"><span class="material-symbols-outlined">tab</span>Tabs</a>
-      <a href="#stats" class="nav-item"><span class="material-symbols-outlined">query_stats</span>Stats</a>
-      <a href="#apps" class="nav-item"><span class="material-symbols-outlined">apps</span>App Tiles</a>
-      <a href="#schedule" class="nav-item"><span class="material-symbols-outlined">calendar_month</span>Schedule</a>
-      <a href="#empty" class="nav-item"><span class="material-symbols-outlined">inbox</span>Empty States</a>
-      <a href="#login" class="nav-item"><span class="material-symbols-outlined">login</span>Login Layout</a>
-      <a href="#extras" class="nav-item"><span class="material-symbols-outlined">extension</span>Extras</a>
-    </nav>
-
-    <div class="sidebar-footer">
-      <div class="user-info" style="cursor:default;">
-        <div class="user-avatar">UT</div>
-        <div class="user-details">
-          <div class="user-name truncate">UI Template</div>
-          <div class="user-role">Reusable Starter</div>
-        </div>
-      </div>
-    </div>
-  </aside>
 
   <main class="content">
     <div class="page-header" id="overview">
