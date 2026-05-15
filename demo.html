@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2004 Design Tech Music System - Demo</title>
+    
+    <!-- Tabler CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta19/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@2.40.0/iconfont/tabler-icons.min.css" rel="stylesheet"/>
+    
+    <style>
+        .song-card {
+            transition: all 0.3s ease;
+        }
+        .song-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .vote-btn {
+            cursor: pointer;
+        }
+        .vote-btn.active {
+            background-color: #206bc4;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- Header -->
+        <header class="navbar navbar-expand-md navbar-light d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="demo.html">
+                        <i class="ti ti-music"></i>
+                        2004 Design Tech Music System
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown">
+                            <span class="avatar avatar-sm">JD</span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>john_doe</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="#" class="dropdown-item">
+                                <i class="ti ti-brand-spotify me-2"></i>Connect Spotify
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="ti ti-logout me-2"></i>Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <h2 class="page-title">
+                                Studio Playlist
+                            </h2>
+                            <div class="text-muted mt-1">2004 Design Tech Freshman Studio</div>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSongModal">
+                                <i class="ti ti-plus me-2"></i>Add Song
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <div class="row row-cards">
+                        <!-- Sample Song 1 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card song-card">
+                                <div class="card-body">
+                                    <h3 class="card-title">Blinding Lights</h3>
+                                    <p class="text-muted mb-2">
+                                        <i class="ti ti-user me-1"></i>The Weeknd
+                                    </p>
+                                    <p class="text-muted small mb-2">
+                                        <i class="ti ti-album me-1"></i>After Hours
+                                    </p>
+                                    <div class="mt-3">
+                                        <small class="text-muted">
+                                            Added by john_doe
+                                        </small>
+                                    </div>
+                                    <div class="mt-3 d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-success vote-btn active">
+                                            <i class="ti ti-heart me-1"></i>Keep (5)
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger vote-btn">
+                                            <i class="ti ti-trash me-1"></i>Remove (1)
+                                        </button>
+                                    </div>
+                                    <small class="text-muted mt-2 d-block">
+                                        3 removal votes needed
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sample Song 2 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card song-card">
+                                <div class="card-body">
+                                    <h3 class="card-title">Levitating</h3>
+                                    <p class="text-muted mb-2">
+                                        <i class="ti ti-user me-1"></i>Dua Lipa
+                                    </p>
+                                    <p class="text-muted small mb-2">
+                                        <i class="ti ti-album me-1"></i>Future Nostalgia
+                                    </p>
+                                    <div class="mt-3">
+                                        <small class="text-muted">
+                                            Added by sarah_m
+                                        </small>
+                                    </div>
+                                    <div class="mt-3 d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-success vote-btn">
+                                            <i class="ti ti-heart me-1"></i>Keep (8)
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger vote-btn">
+                                            <i class="ti ti-trash me-1"></i>Remove (0)
+                                        </button>
+                                    </div>
+                                    <small class="text-muted mt-2 d-block">
+                                        3 removal votes needed
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sample Song 3 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card song-card">
+                                <div class="card-body">
+                                    <h3 class="card-title">Good 4 U</h3>
+                                    <p class="text-muted mb-2">
+                                        <i class="ti ti-user me-1"></i>Olivia Rodrigo
+                                    </p>
+                                    <p class="text-muted small mb-2">
+                                        <i class="ti ti-album me-1"></i>SOUR
+                                    </p>
+                                    <div class="mt-3">
+                                        <small class="text-muted">
+                                            Added by mike_k
+                                        </small>
+                                    </div>
+                                    <div class="mt-3 d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-success vote-btn">
+                                            <i class="ti ti-heart me-1"></i>Keep (3)
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger vote-btn active">
+                                            <i class="ti ti-trash me-1"></i>Remove (2)
+                                        </button>
+                                    </div>
+                                    <small class="text-muted mt-2 d-block">
+                                        3 removal votes needed
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sample Song 4 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card song-card">
+                                <div class="card-body">
+                                    <h3 class="card-title">Heat Waves</h3>
+                                    <p class="text-muted mb-2">
+                                        <i class="ti ti-user me-1"></i>Glass Animals
+                                    </p>
+                                    <p class="text-muted small mb-2">
+                                        <i class="ti ti-album me-1"></i>Dreamland
+                                    </p>
+                                    <div class="mt-3">
+                                        <small class="text-muted">
+                                            Added by emma_t
+                                        </small>
+                                    </div>
+                                    <div class="mt-3 d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-success vote-btn">
+                                            <i class="ti ti-heart me-1"></i>Keep (6)
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger vote-btn">
+                                            <i class="ti ti-trash me-1"></i>Remove (1)
+                                        </button>
+                                    </div>
+                                    <small class="text-muted mt-2 d-block">
+                                        3 removal votes needed
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sample Song 5 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card song-card">
+                                <div class="card-body">
+                                    <h3 class="card-title">Stay</h3>
+                                    <p class="text-muted mb-2">
+                                        <i class="ti ti-user me-1"></i>The Kid LAROI & Justin Bieber
+                                    </p>
+                                    <p class="text-muted small mb-2">
+                                        <i class="ti ti-album me-1"></i>Stay
+                                    </p>
+                                    <div class="mt-3">
+                                        <small class="text-muted">
+                                            Added by alex_w
+                                        </small>
+                                    </div>
+                                    <div class="mt-3 d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-success vote-btn">
+                                            <i class="ti ti-heart me-1"></i>Keep (4)
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger vote-btn">
+                                            <i class="ti ti-trash me-1"></i>Remove (0)
+                                        </button>
+                                    </div>
+                                    <small class="text-muted mt-2 d-block">
+                                        3 removal votes needed
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sample Song 6 -->
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card song-card">
+                                <div class="card-body">
+                                    <h3 class="card-title">Peaches</h3>
+                                    <p class="text-muted mb-2">
+                                        <i class="ti ti-user me-1"></i>Justin Bieber ft. Daniel Caesar
+                                    </p>
+                                    <p class="text-muted small mb-2">
+                                        <i class="ti ti-album me-1"></i>Justice
+                                    </p>
+                                    <div class="mt-3">
+                                        <small class="text-muted">
+                                            Added by lisa_p
+                                        </small>
+                                    </div>
+                                    <div class="mt-3 d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-success vote-btn">
+                                            <i class="ti ti-heart me-1"></i>Keep (7)
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger vote-btn">
+                                            <i class="ti ti-trash me-1"></i>Remove (0)
+                                        </button>
+                                    </div>
+                                    <small class="text-muted mt-2 d-block">
+                                        3 removal votes needed
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center">
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    2004 Design Tech Freshman Studio Music System - Demo View
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Add Song Modal -->
+    <div class="modal fade" id="addSongModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Song to Playlist</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs mb-3" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#spotify-search" type="button">
+                                <i class="ti ti-brand-spotify me-2"></i>Search Spotify
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#manual-add" type="button">
+                                <i class="ti ti-edit me-2"></i>Manual Entry
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="spotify-search">
+                            <div class="mb-3">
+                                <label class="form-label">Search for a song</label>
+                                <input type="text" class="form-control" placeholder="Song name or artist..." value="Example search results">
+                            </div>
+                            <div class="list-group">
+                                <div class="list-group-item">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-primary text-white rounded me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            <i class="ti ti-music"></i>
+                                        </div>
+                                        <div>
+                                            <strong>Example Song</strong><br>
+                                            <small class="text-muted">Artist Name • Album Name</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="manual-add">
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label">Song Title</label>
+                                    <input type="text" class="form-control" placeholder="Enter song title">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Artist</label>
+                                    <input type="text" class="form-control" placeholder="Enter artist name">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Album (optional)</label>
+                                    <input type="text" class="form-control" placeholder="Enter album name">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add Song</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabler JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta19/dist/js/tabler.min.js"></script>
+</body>
+</html>

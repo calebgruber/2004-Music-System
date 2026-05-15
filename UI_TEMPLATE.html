@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Universal UI Template</title>
+  <meta name="description" content="Single-file universal UI template with all shared components and theme switcher." />
+  <script>
+    (function(){
+      var t = localStorage.getItem('cg-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <style>
+/* =====================================================
+   CG Internal – Shared Stylesheet
+   Matches the example UI: sidebar + cards + alerts
+   Uses Google Material Symbols (Outlined)
+   ===================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
+/* ── CSS custom properties (light theme default) ─── */
+:root {
+  /* In a real app this can be set from a settings page */
+  --brand-primary:    #4f6fff;
+  --sidebar-bg:      #10192d;
+  --sidebar-text:    #91a4c9;
+  --sidebar-active:  #f8fbff;
+  --sidebar-hover:   #172540;
+  --sidebar-accent:  #4f6fff;
+  --sidebar-width:   240px;
+  --topbar-offset:   5.5rem;
+  --loader-width:    42%;
+
+  --bg:              #edf4ff;
+  --surface:         #ffffff;
+  --surface-raised:  #f7faff;
+  --border:          #d7e4fb;
+  --text:            #13213d;
+  --text-muted:      #5d708f;
+  --text-link:       #4f6fff;
+
+  --primary:         var(--brand-primary);
+  --primary-rgb:     79,111,255;
+  --primary-hover:   #3d5ef5;
+  --primary-text:    #ffffff;
+
+  --danger:          #d94f66;
+  --danger-bg:       #fbecef;
+  --danger-border:   #f2bcc6;
+
+  --warning:         #ca8a04;
+  --warning-bg:      #fff6dc;
+  --warning-border:  #efd58a;
+
+  --success:         #0d9a6f;
+  --success-bg:      #e8fbf4;
+  --success-border:  #9bddc5;
+
+  --info:            #4f6fff;
+  --info-bg:         #edf2ff;
+  --info-border:     #bfd0ff;
+
+  --radius:          1px;
+  --radius-lg:       3px;
+  --shadow:          0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md:       0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+  --font:            'Inter', system-ui, -apple-system, sans-serif;
+  --transition:      150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Dark theme ──────────────────────────────────── */
+[data-theme="dark"] {
+  --bg:              #0a1220;
+  --surface:         #121d32;
+  --surface-raised:  #18243d;
+  --border:          #24324f;
+  --text:            #edf4ff;
+  --text-muted:      #8ca0c2;
+  --text-link:       #8fb1ff;
+
+  --danger-bg:       #341722;
+  --danger-border:   #6a3240;
+  --warning-bg:      #342a14;
+  --warning-border:  #69552a;
+  --success-bg:      #132e29;
+  --success-border:  #25584d;
+  --info-bg:         #1a2443;
+  --info-border:     #334f9f;
+}
+
+/* ── Reset & base ────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { height: 100%; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  height: 100%;
+  display: flex;
+  min-height: 100vh;
+  transition: background var(--transition), color var(--transition);
+}
+
+[data-theme="dark"] body {
+  background: var(--bg);
+}
+
+a { color: var(--text-link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+img { max-width: 100%; }
+
+/* ── App shell ───────────────────────────────────── */
+.app {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  padding-top: var(--topbar-offset);
+}
+
+/* ── Top navigation bar ──────────────────────────── */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  min-height: 2.75rem;
+  background: var(--surface);
+  border-bottom: 1px solid rgba(var(--primary-rgb),0.12);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0.75rem 0;
+  z-index: 100;
+  box-shadow: none;
+  flex-wrap: wrap;
+}
+
+[data-theme="dark"] .topbar {
+  background: linear-gradient(90deg, #0b1530 0%, #142445 48%, #13203b 100%);
+  border-bottom: 1px solid rgba(151,177,255,0.16);
+  box-shadow: 0 10px 24px rgba(7, 15, 34, 0.28);
+}
+
+/* Left app identity area */
+.topbar-left {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.topbar-app {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #f8fbff;
+  letter-spacing: -0.01em;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(151,177,255,0.2);
+  background: linear-gradient(90deg, rgba(79,111,255,0.18) 0%, rgba(255,255,255,0.05) 100%);
+}
+
+.topbar-app .material-symbols-outlined {
+  font-size: 1rem;
+  color: var(--sidebar-accent);
+}
+
+.topbar-nav {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.topbar-nav .nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.75rem 0.9rem 0.7rem;
+  color: #b7c6e0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-top: 3px solid transparent;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  margin-bottom: 0;
+  border-radius: 0;
+  background: rgba(79,111,255,0.03);
+  white-space: nowrap;
+}
+
+.topbar-nav .nav-item:hover {
+  background: rgba(79,111,255,0.08);
+  color: #f8fbff;
+}
+
+.topbar-nav .nav-item.active {
+  border-top-color: var(--primary);
+  border-left: none;
+  border-right: none;
+  background: rgba(79,111,255,0.1);
+  color: #f8fbff;
+  padding-left: 0.9rem;
+}
+
+[data-theme="dark"] .topbar-nav .nav-item.active {
+  border-top-color: var(--primary);
+}
+
+.topbar-nav .nav-item .material-symbols-outlined {
+  font-size: 1rem;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  margin-left: auto;
+  padding-bottom: 0.25rem;
+}
+
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.75rem;
+  color: #c4d2ea;
+  padding: 0.25rem 0.55rem 0.25rem 0.3rem;
+  border-radius: 999px;
+  border: 1px solid rgba(151,177,255,0.22);
+  background: linear-gradient(90deg, rgba(79,111,255,0.24) 0%, rgba(79,111,255,0.08) 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+}
+
+.topbar-username {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #eef4ff;
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar-user-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.15;
+}
+
+.topbar-user-role {
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #aebee0;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .topbar-user-meta { display: none; }
+}
+
+.topbar-avatar {
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6b8cff 0%, #3d5ef5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.18);
+}
+
+.topbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(151,177,255,0.14);
+  border-radius: 3px;
+  cursor: pointer;
+  color: #b7c6e0;
+  transition: background var(--transition), color var(--transition);
+  text-decoration: none;
+}
+
+.topbar-btn:hover { background: rgba(79,111,255,0.18); color: #f8fbff; text-decoration: none; }
+.topbar-btn .material-symbols-outlined { font-size: 1.0625rem; }
+
+.profile-menu {
+  position: relative;
+}
+
+.profile-menu-toggle {
+  border: none;
+  cursor: pointer;
+}
+
+.profile-menu-list {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  right: 0;
+  min-width: 12rem;
+  display: none;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.35rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  z-index: 200;
+}
+
+.profile-menu-list.open {
+  display: flex;
+}
+
+.profile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.8125rem;
+  color: var(--text);
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.profile-menu-item:hover {
+  background: rgba(var(--primary-rgb),0.08);
+  border-color: rgba(var(--primary-rgb),0.16);
+}
+
+.color-picker-shell {
+  --color-control-border: rgba(var(--primary-rgb),0.2);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.75);
+}
+
+.color-picker-shell input[type="color"] {
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.color-picker-shell input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+.color-picker-shell input[type="color"]::-webkit-color-swatch { border: 1px solid var(--color-control-border); }
+.color-picker-shell input[type="color"]::-moz-color-swatch { border: 1px solid var(--color-control-border); }
+
+.color-picker-meta {
+  min-width: 0;
+}
+
+.color-picker-meta strong {
+  display: block;
+  color: var(--text);
+  margin-bottom: 0.15rem;
+}
+
+.color-picker-meta code {
+  display: inline-block;
+  color: var(--primary);
+  background: rgba(var(--primary-rgb),0.08);
+  padding: 0.15rem 0.35rem;
+}
+
+/* ── Sidebar ─────────────────────────────────────── */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background var(--transition), color var(--transition);
+  margin-bottom: 2px;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  background: var(--sidebar-hover);
+  color: #e2e8f0;
+  text-decoration: none;
+}
+
+.nav-item.active {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--sidebar-active);
+  border-left: 2px solid var(--sidebar-accent);
+  padding-left: calc(0.75rem - 2px);
+}
+
+.nav-item .material-symbols-outlined {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.nav-item.active .material-symbols-outlined {
+  opacity: 1;
+  color: var(--sidebar-accent);
+}
+
+/* ── Main content area ───────────────────────────── */
+.content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.75rem 2rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  gap: 1rem;
+  flex-wrap: wrap;
+  box-shadow: inset 0 -1px 0 rgba(var(--primary-rgb), 0.06);
+}
+
+[data-theme="dark"] .page-header {
+  background: var(--surface);
+}
+
+.page-header h1 {
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.page-header .breadcrumb {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+  max-width: 56rem;
+}
+
+/* App context badge shown above the page title */
+.app-context-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--primary);
+  background: rgba(59,130,246, 0.1);
+  border: 1px solid rgba(59,130,246, 0.25);
+  border-radius: 3px;
+  padding: 0.175rem 0.45rem;
+  margin-bottom: 0.3rem;
+}
+
+.app-context-badge .material-symbols-outlined { font-size: 0.8125rem; }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.page-body {
+  padding: 1.75rem 2rem 3rem;
+  flex: 1;
+  max-width: 1500px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ── Alerts ──────────────────────────────────────── */
+.alerts { display: flex; flex-direction: column; gap: 0.625rem; margin-bottom: 1.5rem; }
+
+/* Alert = tab style: left border + colored fill, no card wrapper */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 1rem;
+  border-radius: 5px;
+  border: none;
+  border-left: 3px solid var(--alert-accent, var(--primary));
+  /* Light mode: solid accent background */
+  background: var(--alert-accent, var(--primary));
+  font-size: 0.875rem;
+  font-weight: 500;
+  position: relative;
+  /* Light mode text: white or black (per --alert-text-on-solid) */
+  color: var(--alert-text-on-solid, #ffffff);
+   border-top-right-radius: 5px;
+   border-bottom-right-radius: 5px;
+}
+
+[data-theme="dark"] .alert {
+  /* Dark mode: 25% opacity background */
+  background: rgba(var(--alert-accent-rgb, 59,130,246), 0.25);
+  color: var(--alert-accent, var(--primary));
+}
+
+.alert .material-symbols-outlined {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+}
+
+.alert-text { flex: 1; line-height: 1.5; }
+
+.alert-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.75;
+  transition: opacity var(--transition);
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.alert-close:hover { opacity: 1; }
+.alert-close .material-symbols-outlined { font-size: 1rem; }
+
+/* ── Card grid ───────────────────────────────────── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.card-grid-2 { grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); }
+.card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.card-full   { grid-column: 1 / -1; }
+
+/* ── Card ────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* Colored left border + accent vars come from inline style via ui_card_open() */
+}
+
+/* Top row: tab (auto-width) + optional actions (right-aligned) */
+.card-top {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 0px solid var(--border);
+}
+
+/* Tab: only as wide as icon + title; light = solid accent, dark = 25% accent */
+.card-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  flex-shrink: 0;
+  /* Light mode: solid accent background */
+  background: var(--card-accent, var(--primary));
+   border-top-right-radius: 100px;
+   border-bottom-right-radius: 100px;
+}
+
+[data-theme="dark"] .card-tab {
+  /* Dark mode: 25% opacity background */
+  background: rgba(var(--card-accent-rgb, 59,130,246), 0.25);
+}
+
+/* Light mode: white or black text (per contrast) */
+.card-tab .material-symbols-outlined {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+  color: var(--card-text-on-solid, #ffffff);
+}
+
+.card-tab h3 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--card-text-on-solid, #ffffff);
+}
+
+/* Dark mode: icon + text = accent color */
+[data-theme="dark"] .card-tab .material-symbols-outlined,
+[data-theme="dark"] .card-tab h3 {
+  color: var(--card-accent, var(--primary));
+}
+
+/* Optional action buttons placed to the right of the tab */
+.card-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  margin-left: auto;
+}
+
+.card-body { padding: 1rem; flex: 1; }
+
+.card-body p {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.card-footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--surface-raised);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+/* ── Stat cards ─────────────────────────────────── */
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: 0 10px 30px rgba(15, 35, 75, 0.08);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.025em;
+}
+
+.stat-sub {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.stat-icon {
+  float: right;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius);
+  background: rgba(59,130,246,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.stat-icon .material-symbols-outlined { font-size: 1.375rem; }
+
+/* ── Buttons ─────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid rgba(148, 169, 211, 0.24);
+  text-decoration: none;
+  transition: background var(--transition), border-color var(--transition), color var(--transition), box-shadow var(--transition);
+  white-space: nowrap;
+  line-height: 1.25;
+  background: var(--surface);
+  color: #223556;
+  border-color: rgba(151,177,255,0.24);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.75), 0 8px 18px rgba(27, 52, 98, 0.08);
+  min-height: 2.25rem;
+}
+
+.btn:hover { background: var(--surface-raised); text-decoration: none; box-shadow: 0 10px 22px rgba(27, 52, 98, 0.12); }
+.btn .material-symbols-outlined { font-size: 1.0625rem; }
+
+.btn-primary   { background: var(--primary);  border-color: var(--primary);  color: var(--primary-text); }
+.btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); color: var(--primary-text); }
+
+.btn-danger    { background: var(--danger);   border-color: var(--danger);   color: #fff; }
+.btn-danger:hover { filter: brightness(0.96); }
+
+.btn-success   { background: var(--success);  border-color: var(--success);  color: #fff; }
+
+.btn-ghost {
+  background: rgba(var(--primary-rgb), 0.08);
+  border-color: transparent;
+  color: var(--primary);
+  box-shadow: none;
+}
+.btn-ghost:hover { background: rgba(var(--primary-rgb), 0.14); }
+
+.btn-sm { padding: 0.3125rem 0.625rem; font-size: 0.8125rem; }
+.btn-sm .material-symbols-outlined { font-size: 0.9375rem; }
+
+.btn-lg { padding: 0.75rem 1.5rem; font-size: 1rem; }
+
+.btn-icon-only {
+  width: 2.25rem;
+  min-width: 2.25rem;
+  padding: 0;
+  justify-content: center;
+}
+
+.btn-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+[data-theme="dark"] .btn {
+  background: var(--surface);
+  color: #edf4ff;
+  border-color: rgba(151,177,255,0.16);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.24);
+}
+
+[data-theme="dark"] .btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn-primary:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+[data-theme="dark"] .btn-success {
+  background: var(--success);
+  border-color: var(--success);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn-danger {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn:hover {
+  background: var(--surface-raised);
+}
+
+[data-theme="dark"] .btn-ghost {
+  background: rgba(var(--primary-rgb), 0.12);
+}
+
+[data-theme="dark"] .color-picker-shell {
+  background: linear-gradient(180deg, #18243d 0%, #13213a 100%);
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] input[type="file"].form-control,
+[data-theme="dark"] select.form-control,
+[data-theme="dark"] textarea.form-control {
+  background: linear-gradient(180deg, #18243d 0%, #13213a 100%);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  color-scheme: dark;
+}
+
+[data-theme="dark"] input[type="checkbox"],
+[data-theme="dark"] input[type="radio"] {
+  accent-color: var(--primary);
+}
+
+/* ── Forms ───────────────────────────────────────── */
+.form-group { margin-bottom: 1rem; }
+
+label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.375rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.5625rem 0.75rem;
+  font-size: 0.875rem;
+  font-family: var(--font);
+  color: var(--text);
+  background: linear-gradient(180deg, #ffffff 0%, #f7faff 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb),0.16);
+}
+
+textarea.form-control { resize: vertical; min-height: 5rem; }
+
+select.form-control { appearance: auto; }
+
+.form-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.radio-group, .check-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.radio-label, .check-label {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  margin-bottom: 0;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+/* ── Tables ──────────────────────────────────────── */
+.table-wrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+th {
+  text-align: left;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-raised);
+  white-space: nowrap;
+}
+
+td {
+  padding: 0.75rem 0.875rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--bg); }
+
+/* ── Badges ──────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 2px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border: none;
+}
+
+.badge-success { background: var(--success); color: #ffffff; }
+.badge-warning { background: var(--warning); color: #ffffff; }
+.badge-danger  { background: var(--danger); color: #ffffff; }
+.badge-info    { background: var(--info); color: #ffffff; }
+.badge-neutral { background: var(--text-muted); color: #ffffff; }
+
+[data-theme="dark"] .badge-success { color: #6ee7b7; background: rgba(13,154,111,0.25); }
+[data-theme="dark"] .badge-warning { color: #fcd34d; background: rgba(202,138,4,0.25); }
+[data-theme="dark"] .badge-danger  { color: #fca5a5; background: rgba(217,79,102,0.25); }
+[data-theme="dark"] .badge-info    { color: #93c5fd; background: rgba(var(--primary-rgb),0.25); }
+[data-theme="dark"] .badge-neutral { color: #c4d2ea; background: rgba(93,112,143,0.25); }
+
+/* ── Priority dots ───────────────────────────────── */
+.priority-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.priority-high   { background: var(--danger); }
+.priority-medium { background: var(--warning); }
+.priority-low    { background: var(--success); }
+
+/* ── Tabs ────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid rgba(var(--primary-rgb), 0.12);
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-top: 3px solid transparent;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  margin-bottom: 0;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+  white-space: nowrap;
+  text-decoration: none;
+  background: rgba(var(--primary-rgb), 0.03);
+}
+
+.tab:hover { color: var(--text); text-decoration: none; }
+.tab.active { color: var(--primary); border-top-color: var(--primary); background: rgba(var(--primary-rgb), 0.08); }
+[data-theme="dark"] .tab.active { border-top-color: var(--primary); background: rgba(var(--primary-rgb), 0.08); }
+.tab .material-symbols-outlined { font-size: 1rem; }
+
+/* ── Login page – modern split layout ───────────── */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+/* Left banner panel (3/4 width) — purely visual */
+.login-banner {
+  flex: 3;
+  background: var(--login-banner-bg, linear-gradient(135deg,#070e1f 0%,#0d2247 55%,#1e3a8a 100%));
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+.login-banner-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.login-banner-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Right form panel (1/4 width) */
+.login-form-panel {
+  flex: 1;
+  min-width: 450px;
+  max-width: 440px;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem 2.5rem;
+  min-height: 100vh;
+  position: relative;
+  border-left: 1px solid var(--border);
+}
+
+.login-form-logo {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-bottom: 2.5rem;
+}
+
+.login-form-logo-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 8px;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.login-form-logo-icon .material-symbols-outlined {
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.login-form-panel h2 {
+  font-size: 1.625rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  margin-bottom: 0.375rem;
+}
+
+.login-form-panel .login-sub {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.login-form-footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.login-theme-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+/* Input with leading icon */
+.input-icon-wrap {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 0.625rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.0625rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  user-select: none;
+}
+
+.form-control-icon {
+  padding-left: 2.125rem;
+}
+
+/* Legacy login card (kept for error pages) */
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+}
+
+.login-header {
+  background: var(--sidebar-bg);
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+}
+
+.login-header h1 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+}
+
+.login-header .logo-icon {
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.login-header p {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.login-body { padding: 1.5rem; }
+
+@media (max-width: 768px) {
+  .login-page { flex-direction: column; }
+  .login-banner { flex: none; min-height: 200px; }
+  .login-form-panel { max-width: 100%; min-height: auto; border-left: none; border-top: 1px solid var(--border); }
+}
+
+/* ── App launcher grid (ID admin) ─────────────────── */
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 0.75rem;
+}
+
+.app-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 1rem 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  text-align: center;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+  text-decoration: none;
+  color: var(--text);
+}
+
+.app-tile:hover {
+  background: var(--info-bg);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.app-tile .material-symbols-outlined {
+  font-size: 1.75rem;
+  color: var(--primary);
+}
+
+.app-tile-name {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* ── Schedule ────────────────────────────────────── */
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+.schedule-day { min-height: 120px; }
+.schedule-day-header {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 0.375rem;
+  background: var(--surface-raised);
+  border-radius: var(--radius) var(--radius) 0 0;
+  border: 1px solid var(--border);
+}
+
+.schedule-day-body {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 0.375rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-height: 80px;
+}
+
+.schedule-class {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  padding: 0.25rem 0.375rem;
+  border-radius: 0.25rem;
+  background: rgba(59,130,246,0.12);
+  color: var(--primary);
+  border-left: 3px solid var(--primary);
+}
+
+/* ── Progress bars ───────────────────────────────── */
+.progress-bar {
+  width: 100%;
+  height: 0.5rem;
+  background: linear-gradient(180deg, rgba(var(--primary-rgb), 0.08) 0%, rgba(var(--primary-rgb), 0.14) 100%);
+  border-radius: 9999px;
+  overflow: hidden;
+  border: 1px solid rgba(var(--primary-rgb), 0.1);
+}
+
+.progress-fill {
+  --progress-tone: var(--progress-accent, var(--primary));
+  height: 100%;
+  border-radius: 9999px;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--progress-tone) 25%, transparent) 0,
+      color-mix(in srgb, var(--progress-tone) 25%, transparent) 10px,
+      color-mix(in srgb, var(--progress-tone) 8%, transparent) 10px,
+      color-mix(in srgb, var(--progress-tone) 8%, transparent) 20px
+    ),
+    linear-gradient(90deg, var(--progress-tone) 0%, var(--progress-tone) 100%);
+  background-size: 100% 100%, 100% 100%;
+  transition: width 0.4s ease;
+}
+
+/* ── Empty state ─────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--text-muted);
+  gap: 0.75rem;
+}
+
+.empty-state .material-symbols-outlined { font-size: 3rem; opacity: 0.35; }
+.empty-state h3 { font-size: 1rem; font-weight: 600; color: var(--text); }
+.empty-state p  { font-size: 0.875rem; max-width: 280px; line-height: 1.6; }
+
+/* ── Color class chips ───────────────────────────── */
+.class-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+/* ── Misc utilities ──────────────────────────────── */
+.flex         { display: flex; }
+.flex-center  { display: flex; align-items: center; justify-content: center; }
+.gap-1        { gap: 0.25rem; }
+.gap-2        { gap: 0.5rem; }
+.gap-3        { gap: 0.75rem; }
+.gap-4        { gap: 1rem; }
+.mt-1         { margin-top: 0.25rem; }
+.mt-2         { margin-top: 0.5rem; }
+.mt-3         { margin-top: 0.75rem; }
+.mt-4         { margin-top: 1rem; }
+.mb-4         { margin-bottom: 1rem; }
+.text-muted   { color: var(--text-muted); }
+.text-sm      { font-size: 0.875rem; }
+.text-xs      { font-size: 0.75rem; }
+.font-bold    { font-weight: 700; }
+.font-medium  { font-weight: 500; }
+.w-full       { width: 100%; }
+.hidden       { display: none; }
+.divider      { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+.truncate     { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .card-grid-3 { grid-template-columns: 1fr; }
+  .form-row    { grid-template-columns: 1fr; }
+  .schedule-grid { grid-template-columns: repeat(3, 1fr); }
+
+  .page-header { padding: 1rem; }
+  .page-body   { padding: 1rem; }
+  .app { padding-top: 7.5rem; }
+  .topbar {
+    padding-bottom: 0.25rem;
+  }
+  .topbar-left,
+  .topbar-nav,
+  .topbar-right {
+    width: 100%;
+  }
+  .topbar-right {
+    margin-left: 0;
+    justify-content: flex-end;
+  }
+}
+
+.mobile-menu-btn {
+  display: none !important;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border-radius: 3px;
+  transition: background var(--transition), color var(--transition);
+}
+
+.mobile-menu-btn:hover { background: rgba(255,255,255,0.06); color: #e2e8f0; }
+.mobile-menu-btn .material-symbols-outlined { font-size: 1.0625rem; }
+/* ── Page loader (thin top progress bar) ─────────── */
+#page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: var(--loader-width);
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255,255,255,0.22) 0,
+      rgba(255,255,255,0.22) 8px,
+      rgba(255,255,255,0.05) 8px,
+      rgba(255,255,255,0.05) 16px
+    ),
+    linear-gradient(90deg, var(--primary) 0%, #93c5fd 100%);
+  background-size: 180% 100%, 100% 100%;
+  z-index: 9999;
+  pointer-events: none;
+  border-radius: 0 2px 2px 0;
+  box-shadow: 0 0 8px rgba(59,130,246,0.5);
+  animation: none;
+}
+
+#page-loader.pg-done {
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+/* ── Global content entrance animation ───────────── */
+/* Applied to .card and table rows so every page loads with a
+   smooth fade-in-from-below feel (the "hover in" effect). */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  animation: fadeInUp 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Stagger up to 8 cards so they cascade rather than all pop at once */
+.card:nth-child(1)  { animation-delay: 0.00s; }
+.card:nth-child(2)  { animation-delay: 0.04s; }
+.card:nth-child(3)  { animation-delay: 0.08s; }
+.card:nth-child(4)  { animation-delay: 0.12s; }
+.card:nth-child(5)  { animation-delay: 0.16s; }
+.card:nth-child(6)  { animation-delay: 0.20s; }
+.card:nth-child(7)  { animation-delay: 0.24s; }
+.card:nth-child(8)  { animation-delay: 0.28s; }
+
+/* Table rows also fade in gently */
+table tbody tr {
+  animation: fadeInUp 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+table tbody tr:nth-child(1)  { animation-delay: 0.02s; }
+table tbody tr:nth-child(2)  { animation-delay: 0.04s; }
+table tbody tr:nth-child(3)  { animation-delay: 0.06s; }
+table tbody tr:nth-child(4)  { animation-delay: 0.08s; }
+table tbody tr:nth-child(5)  { animation-delay: 0.10s; }
+table tbody tr:nth-child(6)  { animation-delay: 0.12s; }
+table tbody tr:nth-child(7)  { animation-delay: 0.14s; }
+table tbody tr:nth-child(8)  { animation-delay: 0.16s; }
+table tbody tr:nth-child(9)  { animation-delay: 0.18s; }
+table tbody tr:nth-child(10) { animation-delay: 0.20s; }
+
+/* Boarding / urgent status flash (used on transit train cards) */
+@keyframes flash {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+/* Stat cards also get entrance animation */
+.stat-card {
+  animation: fadeInUp 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.stat-card:nth-child(1) { animation-delay: 0.00s; }
+.stat-card:nth-child(2) { animation-delay: 0.05s; }
+.stat-card:nth-child(3) { animation-delay: 0.10s; }
+.stat-card:nth-child(4) { animation-delay: 0.15s; }
+
+/* Extra tiny helpers for this standalone template */
+.demo-section-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+.demo-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+@media (max-width: 900px) {
+  .demo-grid-2 { grid-template-columns: 1fr; }
+}
+.dialog-demo {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 1rem;
+  width: min(520px, 92vw);
+}
+.dialog-demo::backdrop { background: rgba(2, 6, 23, 0.6); }
+.kbd {
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 0.125rem 0.35rem;
+  font-size: 0.75rem;
+  background: var(--surface-raised);
+}
+  </style>
+</head>
+<body>
+<div id="page-loader"></div>
+<div class="app">
+  <div class="topbar">
+    <nav class="topbar-nav" aria-label="Primary">
+      <a href="#overview" class="nav-item active"><span class="material-symbols-outlined">home</span>Overview</a>
+      <a href="#alerts" class="nav-item"><span class="material-symbols-outlined">notifications</span>Alerts</a>
+      <a href="#cards" class="nav-item"><span class="material-symbols-outlined">dashboard</span>Cards</a>
+      <a href="#buttons" class="nav-item"><span class="material-symbols-outlined">smart_button</span>Buttons</a>
+      <a href="#forms" class="nav-item"><span class="material-symbols-outlined">edit_note</span>Forms</a>
+      <a href="#tables" class="nav-item"><span class="material-symbols-outlined">table</span>Tables</a>
+      <a href="#tabs" class="nav-item"><span class="material-symbols-outlined">tab</span>Tabs</a>
+      <a href="#stats" class="nav-item"><span class="material-symbols-outlined">query_stats</span>Stats</a>
+      <a href="#apps" class="nav-item"><span class="material-symbols-outlined">apps</span>App Tiles</a>
+      <a href="#schedule" class="nav-item"><span class="material-symbols-outlined">calendar_month</span>Schedule</a>
+      <a href="#empty" class="nav-item"><span class="material-symbols-outlined">inbox</span>Empty States</a>
+      <a href="#login" class="nav-item"><span class="material-symbols-outlined">login</span>Login Layout</a>
+      <a href="#extras" class="nav-item"><span class="material-symbols-outlined">extension</span>Extras</a>
+    </nav>
+
+    <div class="topbar-right">
+      <button class="topbar-btn" title="Notifications">
+        <span class="material-symbols-outlined">notifications</span>
+      </button>
+      <button id="theme-toggle" class="topbar-btn" title="Toggle theme">
+        <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
+      </button>
+      <div class="profile-menu">
+        <button type="button" class="topbar-user profile-menu-toggle" id="profileMenuToggle" aria-label="User profile menu" aria-haspopup="menu" aria-expanded="false">
+          <div class="topbar-avatar">UI</div>
+          <span class="topbar-user-meta">
+            <span class="topbar-username">Template User</span>
+            <span class="topbar-user-role">Design Lead</span>
+          </span>
+          <span class="material-symbols-outlined">expand_more</span>
+        </button>
+        <div class="profile-menu-list" id="profileMenu" role="menu">
+          <a class="profile-menu-item" href="#overview" role="menuitem"><span class="material-symbols-outlined">person</span>Profile</a>
+          <a class="profile-menu-item" href="#extras" role="menuitem"><span class="material-symbols-outlined">settings</span>Settings</a>
+          <a class="profile-menu-item" href="#login" role="menuitem"><span class="material-symbols-outlined">logout</span>Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="content">
+    <div class="page-header" id="overview">
+      <div>
+        <div class="app-context-badge"><span class="material-symbols-outlined">widgets</span>Universal Components</div>
+        <h1>Epic-Inspired Single-File UI Template</h1>
+        <div class="breadcrumb">Cooler blue light theme, pure white cards, stronger utility surfaces, and reusable patterns for product dashboards, portals, and internal tools.</div>
+        <div class="flex gap-2 mt-3" style="flex-wrap:wrap;">
+          <span class="badge badge-info">Epic-style</span>
+          <span class="badge badge-neutral">Pure white cards</span>
+          <span class="badge badge-success">Template ready</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="#login" class="btn btn-primary"><span class="material-symbols-outlined">login</span>View Login Page</a>
+        <a href="#forms" class="btn"><span class="material-symbols-outlined">palette</span>Jump to Controls</a>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <div class="alerts" id="alerts">
+        <div class="alert alert-info" style="--alert-accent:#3b82f6;--alert-accent-rgb:59,130,246;--alert-text-on-solid:#ffffff" data-auto-dismiss="9000">
+          <span class="material-symbols-outlined">info</span>
+          <span class="alert-text">Info alert with auto-dismiss and close button.</span>
+          <button class="alert-close"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="alert alert-success" style="--alert-accent:#10b981;--alert-accent-rgb:16,185,129;--alert-text-on-solid:#ffffff">
+          <span class="material-symbols-outlined">check_circle</span>
+          <span class="alert-text">Success alert for positive feedback.</span>
+        </div>
+        <div class="alert alert-warning" style="--alert-accent:#f59e0b;--alert-accent-rgb:245,158,11;--alert-text-on-solid:#000000">
+          <span class="material-symbols-outlined">warning</span>
+          <span class="alert-text">Warning alert (amber with black text in light mode).</span>
+        </div>
+        <div class="alert alert-danger" style="--alert-accent:#ef4444;--alert-accent-rgb:239,68,68;--alert-text-on-solid:#ffffff">
+          <span class="material-symbols-outlined">error</span>
+          <span class="alert-text">Danger alert for destructive/error messaging.</span>
+        </div>
+      </div>
+
+      <div class="card-grid" id="cards">
+        <div class="card" style="border-left:5px solid #3b82f6;--card-accent:#3b82f6;--card-accent-rgb:59,130,246;--card-text-on-solid:#ffffff">
+          <div class="card-top">
+            <div class="card-tab"><span class="material-symbols-outlined">apps</span><h3>Base Card</h3></div>
+            <div class="card-header-actions"><button class="btn btn-sm">Action</button></div>
+          </div>
+          <div class="card-body"><p>Default card with tab header and inline action area.</p></div>
+          <div class="card-footer"><button class="btn btn-sm">Cancel</button><button class="btn btn-sm btn-primary">Save</button></div>
+        </div>
+
+        <div class="card" style="border-left:5px solid #10b981;--card-accent:#10b981;--card-accent-rgb:16,185,129;--card-text-on-solid:#ffffff">
+          <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">query_stats</span><h3>Progress + Badges</h3></div></div>
+          <div class="card-body">
+            <div class="flex gap-2 mb-4">
+              <span class="badge badge-success">active</span>
+              <span class="badge badge-warning">pending</span>
+              <span class="badge badge-danger">blocked</span>
+              <span class="badge badge-info">new</span>
+              <span class="badge badge-neutral">neutral</span>
+            </div>
+            <p class="mb-4">Progress bars in multiple sizes.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:74%"></div></div>
+            <div class="progress-bar mt-3"><div class="progress-fill" style="width:35%;--progress-accent:var(--warning)"></div></div>
+          </div>
+        </div>
+
+        <div class="card" style="border-left:5px solid #f59e0b;--card-accent:#f59e0b;--card-accent-rgb:245,158,11;--card-text-on-solid:#000000">
+          <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">smart_button</span><h3>Buttons</h3></div></div>
+          <div class="card-body" id="buttons">
+            <div class="demo-section-title">Sizes + variants</div>
+            <div class="flex gap-2" style="flex-wrap:wrap;">
+              <button class="btn">Default</button>
+              <button class="btn btn-primary">Primary</button>
+              <button class="btn btn-success">Success</button>
+              <button class="btn btn-danger" data-confirm="Delete this record?">Danger</button>
+              <button class="btn btn-ghost">Ghost</button>
+              <button class="btn btn-sm">Small</button>
+              <button class="btn btn-lg">Large</button>
+              <button class="btn btn-primary btn-with-icon"><span class="material-symbols-outlined">add</span>Add Item</button>
+              <button class="btn btn-danger btn-with-icon"><span class="material-symbols-outlined">delete</span>Delete Item</button>
+              <button class="btn btn-icon-only" title="More options" aria-label="More options"><span class="material-symbols-outlined">more_horiz</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-full" style="border-left:5px solid #6366f1;--card-accent:#6366f1;--card-accent-rgb:99,102,241;--card-text-on-solid:#ffffff" id="forms">
+          <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">edit_note</span><h3>Forms (all core controls)</h3></div></div>
+          <div class="card-body">
+            <form>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="name">Text input</label>
+                  <input id="name" class="form-control" type="text" placeholder="Jane Doe" />
+                  <div class="form-hint">Basic text input.</div>
+                </div>
+                <div class="form-group">
+                  <label for="email">Email input</label>
+                  <input id="email" class="form-control" type="email" placeholder="jane@example.com" />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="password">Password with strength meter</label>
+                  <div class="input-icon-wrap">
+                    <span class="material-symbols-outlined input-icon">lock</span>
+                    <input id="password" class="form-control form-control-icon" type="password" placeholder="Type secure password" />
+                  </div>
+                  <div id="pw-strength-bar" class="progress-bar mt-2"><div class="progress-fill" style="width:0%"></div></div>
+                </div>
+                <div class="form-group">
+                  <label for="role">Select</label>
+                  <select id="role" class="form-control">
+                    <option>Student</option>
+                    <option>Teacher</option>
+                    <option>Admin</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="bio">Textarea</label>
+                <textarea id="bio" class="form-control" placeholder="Write notes..."></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Radio group</label>
+                  <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="plan" checked /> Basic</label>
+                    <label class="radio-label"><input type="radio" name="plan" /> Pro</label>
+                    <label class="radio-label"><input type="radio" name="plan" /> Enterprise</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Checkbox group</label>
+                  <div class="check-group">
+                    <label class="check-label"><input type="checkbox" checked /> Email alerts</label>
+                    <label class="check-label"><input type="checkbox" /> SMS alerts</label>
+                    <label class="check-label"><input type="checkbox" checked /> Weekly digest</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="accentColor">Color input + live preview</label>
+                  <div class="color-picker-shell">
+                    <input id="accentColor" type="color" value="#4f6fff" data-preview="colorPreview" data-value-target="colorValue" />
+                    <div class="color-picker-meta">
+                      <strong>Accent color</strong>
+                      <code id="colorValue">#4F6FFF</code>
+                      <div class="form-hint">Use this richer input treatment for theme controls.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="file">File input</label>
+                  <input id="file" class="form-control" type="file" />
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button class="btn btn-primary" type="button">Submit</button>
+                <button class="btn" type="reset">Reset</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="card card-full" style="border-left:5px solid #8b5cf6;--card-accent:#8b5cf6;--card-accent-rgb:139,92,246;--card-text-on-solid:#ffffff" id="tables">
+          <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">table</span><h3>Data Table + Priority Dots</h3></div></div>
+          <div class="card-body table-wrap">
+            <table>
+              <thead>
+                <tr><th>Task</th><th>Owner</th><th>Status</th><th>Priority</th><th>Updated</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>UI Audit</td><td>Alex</td><td><span class="badge badge-success">done</span></td><td><span class="flex gap-1" style="align-items:center;"><span class="priority-dot priority-low"></span>Low</span></td><td>Today</td></tr>
+                <tr><td>Top Nav Cleanup</td><td>Sam</td><td><span class="badge badge-warning">pending</span></td><td><span class="flex gap-1" style="align-items:center;"><span class="priority-dot priority-medium"></span>Medium</span></td><td>2h ago</td></tr>
+                <tr><td>Auth Error UX</td><td>Chris</td><td><span class="badge badge-danger">blocked</span></td><td><span class="flex gap-1" style="align-items:center;"><span class="priority-dot priority-high"></span>High</span></td><td>Yesterday</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card card-full" style="border-left:5px solid #ef4444;--card-accent:#ef4444;--card-accent-rgb:239,68,68;--card-text-on-solid:#ffffff" id="tabs">
+          <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">tab</span><h3>Tabs + Dynamic Rows</h3></div></div>
+          <div class="card-body">
+            <div class="tabs">
+              <a class="tab active" href="#"><span class="material-symbols-outlined">settings</span>General</a>
+              <a class="tab" href="#"><span class="material-symbols-outlined">group</span>Members</a>
+              <a class="tab" href="#"><span class="material-symbols-outlined">history</span>History</a>
+            </div>
+
+            <div id="rowsContainer" class="flex" style="flex-direction:column;gap:.5rem;">
+              <div data-row data-row-template class="form-row" style="grid-template-columns:1fr auto;align-items:end;">
+                <div class="form-group" style="margin:0;">
+                  <label>List Item</label>
+                  <input class="form-control" type="text" value="" placeholder="Type item" />
+                </div>
+                <button type="button" class="btn btn-danger" data-remove-row><span class="material-symbols-outlined">delete</span>Remove</button>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <button type="button" class="btn btn-primary" data-add-row="rowsContainer"><span class="material-symbols-outlined">add</span>Add Row</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-grid-2 mt-4" id="stats">
+        <div class="stat-card">
+          <div class="stat-icon"><span class="material-symbols-outlined">groups</span></div>
+          <div class="stat-label">Users</div>
+          <div class="stat-value">1,284</div>
+          <div class="stat-sub">+12% this week</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><span class="material-symbols-outlined">music_note</span></div>
+          <div class="stat-label">Tracks</div>
+          <div class="stat-value">9,412</div>
+          <div class="stat-sub">Synced to playlist</div>
+        </div>
+      </div>
+
+      <div class="card mt-4" style="border-left:5px solid #3b82f6;--card-accent:#3b82f6;--card-accent-rgb:59,130,246;--card-text-on-solid:#ffffff" id="apps">
+        <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">apps</span><h3>App Tiles</h3></div></div>
+        <div class="card-body">
+          <div class="apps-grid">
+            <a class="app-tile" href="#"><span class="material-symbols-outlined">school</span><span class="app-tile-name">Classes</span></a>
+            <a class="app-tile" href="#"><span class="material-symbols-outlined">forum</span><span class="app-tile-name">Messages</span></a>
+            <a class="app-tile" href="#"><span class="material-symbols-outlined">calendar_month</span><span class="app-tile-name">Calendar</span></a>
+            <a class="app-tile" href="#"><span class="material-symbols-outlined">settings</span><span class="app-tile-name">Settings</span></a>
+            <a class="app-tile" href="#"><span class="material-symbols-outlined">analytics</span><span class="app-tile-name">Analytics</span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-4" style="border-left:5px solid #10b981;--card-accent:#10b981;--card-accent-rgb:16,185,129;--card-text-on-solid:#ffffff" id="schedule">
+        <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">calendar_month</span><h3>Schedule Grid</h3></div></div>
+        <div class="card-body">
+          <div class="schedule-grid">
+            <div class="schedule-day"><div class="schedule-day-header">Mon</div><div class="schedule-day-body"><div class="schedule-class">Math</div><div class="schedule-class">Studio</div></div></div>
+            <div class="schedule-day"><div class="schedule-day-header">Tue</div><div class="schedule-day-body"><div class="schedule-class">English</div></div></div>
+            <div class="schedule-day"><div class="schedule-day-header">Wed</div><div class="schedule-day-body"><div class="schedule-class">Science</div></div></div>
+            <div class="schedule-day"><div class="schedule-day-header">Thu</div><div class="schedule-day-body"><div class="schedule-class">Art</div></div></div>
+            <div class="schedule-day"><div class="schedule-day-header">Fri</div><div class="schedule-day-body"><div class="schedule-class">Lab</div></div></div>
+            <div class="schedule-day"><div class="schedule-day-header">Sat</div><div class="schedule-day-body"></div></div>
+            <div class="schedule-day"><div class="schedule-day-header">Sun</div><div class="schedule-day-body"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-grid-2 mt-4" id="empty">
+        <div class="card" style="border-left:5px solid #64748b;--card-accent:#64748b;--card-accent-rgb:100,116,139;--card-text-on-solid:#ffffff">
+          <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">inbox</span><h3>Empty State</h3></div></div>
+          <div class="card-body">
+            <div class="empty-state">
+              <span class="material-symbols-outlined">music_off</span>
+              <h3>No content yet</h3>
+              <p>Use this when a list/table/query has no results.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="border-left:5px solid #f59e0b;--card-accent:#f59e0b;--card-accent-rgb:245,158,11;--card-text-on-solid:#000000">
+          <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">palette</span><h3>Class Chips</h3></div></div>
+          <div class="card-body">
+            <span class="class-chip" style="background:#dbeafe;color:#1d4ed8">Blue Chip</span>
+            <span class="class-chip" style="background:#dcfce7;color:#166534">Green Chip</span>
+            <span class="class-chip" style="background:#fee2e2;color:#991b1b">Red Chip</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-4" style="border-left:5px solid #6366f1;--card-accent:#6366f1;--card-accent-rgb:99,102,241;--card-text-on-solid:#ffffff" id="login">
+        <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">login</span><h3>Login Components</h3></div></div>
+        <div class="card-body">
+          <div class="login-card">
+            <div class="login-header">
+              <span class="material-symbols-outlined logo-icon">lock</span>
+              <h1>Sign In</h1>
+              <p>Legacy login card style</p>
+            </div>
+            <div class="login-body">
+              <div class="form-group">
+                <label>Username</label>
+                <input class="form-control" type="text" placeholder="username" />
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input class="form-control" type="password" placeholder="••••••••" />
+              </div>
+              <div class="form-actions"><button class="btn btn-primary">Login</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-4" style="border-left:5px solid #ef4444;--card-accent:#ef4444;--card-accent-rgb:239,68,68;--card-text-on-solid:#ffffff" id="extras">
+        <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">extension</span><h3>Extras (Dialog, Loader trigger, Keyboard tags)</h3></div></div>
+        <div class="card-body">
+          <div class="flex gap-2" style="flex-wrap:wrap;align-items:center;">
+            <button class="btn" id="openDialogBtn"><span class="material-symbols-outlined">open_in_new</span>Open Dialog</button>
+            <a class="btn" href="#overview">Trigger Page Loader (same page link)</a>
+            <span class="text-sm">Shortcut: <span class="kbd">Ctrl</span> + <span class="kbd">K</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<dialog id="demoDialog" class="dialog-demo">
+  <h3 style="margin-bottom:.5rem;">Dialog / Modal Example</h3>
+  <p class="text-sm text-muted" style="margin-bottom:1rem;">This uses native <code>&lt;dialog&gt;</code> in one file.</p>
+  <div class="form-actions">
+    <button class="btn" id="closeDialogBtn">Close</button>
+    <button class="btn btn-primary">Confirm</button>
+  </div>
+</dialog>
+
+<script>
+/* inline shared UI behavior script (ported from CG Internal app.js) */
+
+(function () {
+  'use strict';
+
+  /* ── Theme toggle ─────────────────────────────── */
+  const THEME_KEY = 'cg-theme';
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem(THEME_KEY, theme);
+    const icon = document.getElementById('theme-icon');
+    if (icon) icon.textContent = theme === 'dark' ? 'light_mode' : 'dark_mode';
+  }
+
+  function initTheme() {
+    const saved = localStorage.getItem(THEME_KEY) ||
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    applyTheme(saved);
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  }
+
+  /* ── Dismissible alerts ───────────────────────── */
+  function initAlerts() {
+    document.querySelectorAll('.alert-close').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const alert = btn.closest('.alert');
+        if (alert) {
+          alert.style.opacity = '0';
+          alert.style.transform = 'translateY(-4px)';
+          alert.style.transition = 'opacity 200ms, transform 200ms';
+          setTimeout(function () { alert.remove(); }, 200);
+        }
+      });
+    });
+  }
+
+  /* ── Auto-dismiss flash messages ─────────────── */
+  function initFlash() {
+    const flash = document.querySelectorAll('.alert[data-auto-dismiss]');
+    flash.forEach(function (el) {
+      const delay = parseInt(el.getAttribute('data-auto-dismiss'), 10) || 4000;
+      setTimeout(function () {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 400ms';
+        setTimeout(function () { el.remove(); }, 400);
+      }, delay);
+    });
+  }
+
+  /* ── Confirm dangerous actions ────────────────── */
+  function initConfirm() {
+    document.querySelectorAll('[data-confirm]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        const msg = el.getAttribute('data-confirm') || 'Are you sure?';
+        if (!window.confirm(msg)) e.preventDefault();
+      });
+    });
+  }
+
+  /* ── Password strength indicator ─────────────── */
+  function initPasswordStrength() {
+    const pw = document.getElementById('password');
+    const bar = document.getElementById('pw-strength-bar');
+    if (!pw || !bar) return;
+
+    pw.addEventListener('input', function () {
+      const val = pw.value;
+      let score = 0;
+      if (val.length >= 8)  score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      const pct = (score / 4) * 100;
+      const colors = ['#ef4444', '#f59e0b', '#3b82f6', '#10b981'];
+      bar.querySelector('.progress-fill').style.width = pct + '%';
+      bar.querySelector('.progress-fill').style.setProperty('--progress-accent', colors[score - 1] || '#e2e8f0');
+    });
+  }
+
+  /* ── Color picker preview ─────────────────────── */
+  function initColorPreview() {
+    document.querySelectorAll('input[type="color"][data-preview]').forEach(function (inp) {
+      const target = document.getElementById(inp.getAttribute('data-preview'));
+      const valueTarget = document.getElementById(inp.getAttribute('data-value-target'));
+      if (!target && !valueTarget) return;
+      function syncColor() {
+        if (target) target.style.background = inp.value;
+        if (valueTarget) valueTarget.textContent = inp.value.toUpperCase();
+      }
+      inp.addEventListener('input', syncColor);
+      syncColor();
+    });
+  }
+
+  /* ── Dynamic form rows (add / remove) ────────── */
+  function initDynamicRows() {
+    document.querySelectorAll('[data-add-row]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const container = document.getElementById(btn.getAttribute('data-add-row'));
+        const template  = container.querySelector('[data-row-template]');
+        if (!template) return;
+        const clone = template.cloneNode(true);
+        clone.removeAttribute('data-row-template');
+        clone.querySelectorAll('input, select, textarea').forEach(function (el) {
+          el.value = '';
+        });
+        container.appendChild(clone);
+      });
+    });
+
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('[data-remove-row]')) {
+        e.target.closest('[data-remove-row]').closest('[data-row]').remove();
+      }
+    });
+  }
+
+  /* ── Page loader ──────────────────────────────── */
+  function initPageLoader() {
+    var loader = document.getElementById('page-loader');
+    if (!loader) return;
+
+    function startLoader() {
+      loader.classList.remove('pg-done');
+      loader.style.opacity  = '1';
+      loader.style.animation = 'none';
+      void loader.offsetWidth; // force reflow to restart animation
+      loader.style.animation = '';
+    }
+
+    // Intercept same-origin link clicks
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest('a[href]');
+      if (!link) return;
+      var href = link.getAttribute('href') || '';
+      if (link.target || e.ctrlKey || e.metaKey || e.shiftKey ||
+          href.charAt(0) === '#' || href.indexOf('javascript:') === 0 || href === '') return;
+      startLoader();
+    });
+
+    // Intercept form submits
+    document.addEventListener('submit', function (e) {
+      if (!e.defaultPrevented) startLoader();
+    });
+  }
+
+  /* ── Bootstrap on DOMContentLoaded ───────────── */
+  document.addEventListener('DOMContentLoaded', function () {
+    /* Complete the page loader */
+    var loader = document.getElementById('page-loader');
+    if (loader) loader.classList.add('pg-done');
+
+    initTheme();
+    initAlerts();
+    initFlash();
+    initConfirm();
+    initPasswordStrength();
+    initColorPreview();
+    initDynamicRows();
+    initPageLoader();
+
+    /* Theme toggle button */
+    const themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+  });
+
+})();
+
+/* Standalone extras */
+document.addEventListener('DOMContentLoaded', function () {
+  const dlg = document.getElementById('demoDialog');
+  const openBtn = document.getElementById('openDialogBtn');
+  const closeBtn = document.getElementById('closeDialogBtn');
+  if (openBtn && dlg) openBtn.addEventListener('click', function(){ dlg.showModal(); });
+  if (closeBtn && dlg) closeBtn.addEventListener('click', function(){ dlg.close(); });
+
+  /* Keep nav active state in demo */
+  document.querySelectorAll('.nav-item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      document.querySelectorAll('.nav-item').forEach(function (n) { n.classList.remove('active'); });
+      item.classList.add('active');
+    });
+  });
+
+  const profileToggle = document.getElementById('profileMenuToggle');
+  const profileMenu = document.getElementById('profileMenu');
+  if (profileToggle && profileMenu) {
+    profileToggle.addEventListener('click', function () {
+      const open = profileMenu.classList.toggle('open');
+      profileToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.profile-menu')) {
+        profileMenu.classList.remove('open');
+        profileToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+});
+</script>
+</body>
+</html>

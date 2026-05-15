@@ -1,0 +1,25 @@
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Prevent directory listing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "^\.env$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Set default charset
+AddDefaultCharset UTF-8
+
+# Enable error reporting (disable in production)
+php_flag display_errors Off
+php_flag log_errors On
+
+# Set session timeout
+php_value session.gc_maxlifetime 3600
+
+# Increase upload size for potential future features
+php_value upload_max_filesize 10M
+php_value post_max_size 10M
