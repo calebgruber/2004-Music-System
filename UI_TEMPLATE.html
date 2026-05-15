@@ -23,6 +23,8 @@
 
 /* ── CSS custom properties (light theme default) ─── */
 :root {
+  /* In a real app this can be set from a settings page */
+  --brand-primary:    #4f6fff;
   --sidebar-bg:      #10192d;
   --sidebar-text:    #91a4c9;
   --sidebar-active:  #f8fbff;
@@ -40,7 +42,7 @@
   --text-muted:      #5d708f;
   --text-link:       #4f6fff;
 
-  --primary:         #4f6fff;
+  --primary:         var(--brand-primary);
   --primary-rgb:     79,111,255;
   --primary-hover:   #3d5ef5;
   --primary-text:    #ffffff;
@@ -129,20 +131,26 @@ img { max-width: 100%; }
   left: 0;
   right: 0;
   min-height: 2.75rem;
-  background: linear-gradient(90deg, #0b1530 0%, #142445 48%, #13203b 100%);
-  border-bottom: 1px solid rgba(151,177,255,0.16);
+  background: var(--surface);
+  border-bottom: 1px solid rgba(var(--primary-rgb),0.12);
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.25rem 0.75rem 0;
   z-index: 100;
-  box-shadow: 0 10px 24px rgba(7, 15, 34, 0.28);
+  box-shadow: none;
   flex-wrap: wrap;
+}
+
+[data-theme="dark"] .topbar {
+  background: linear-gradient(90deg, #0b1530 0%, #142445 48%, #13203b 100%);
+  border-bottom: 1px solid rgba(151,177,255,0.16);
+  box-shadow: 0 10px 24px rgba(7, 15, 34, 0.28);
 }
 
 /* Left app identity area */
 .topbar-left {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 0.5rem;
   min-width: 0;
@@ -202,13 +210,15 @@ img { max-width: 100%; }
 
 .topbar-nav .nav-item.active {
   border-top-color: var(--primary);
+  border-left: none;
+  border-right: none;
   background: rgba(79,111,255,0.1);
   color: #f8fbff;
   padding-left: 0.9rem;
 }
 
 [data-theme="dark"] .topbar-nav .nav-item.active {
-  border-top-color: rgba(var(--primary-rgb), 0.25);
+  border-top-color: var(--primary);
 }
 
 .topbar-nav .nav-item .material-symbols-outlined {
@@ -298,16 +308,48 @@ img { max-width: 100%; }
 .topbar-btn:hover { background: rgba(79,111,255,0.18); color: #f8fbff; text-decoration: none; }
 .topbar-btn .material-symbols-outlined { font-size: 1.0625rem; }
 
-.topbar-login {
-  color: #f8fbff;
-  background: linear-gradient(90deg, rgba(79,111,255,0.98) 0%, rgba(100,132,255,0.98) 100%);
-  border-color: rgba(134,160,255,0.55);
-  font-weight: 700;
-  padding: 0.35rem 0.65rem;
+.profile-menu {
+  position: relative;
 }
 
-.topbar-login:hover {
-  background: linear-gradient(90deg, rgba(61,94,245,1) 0%, rgba(79,111,255,1) 100%);
+.profile-menu-toggle {
+  border: none;
+  cursor: pointer;
+}
+
+.profile-menu-list {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  right: 0;
+  min-width: 12rem;
+  display: none;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.35rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  z-index: 200;
+}
+
+.profile-menu-list.open {
+  display: flex;
+}
+
+.profile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.8125rem;
+  color: var(--text);
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.profile-menu-item:hover {
+  background: rgba(var(--primary-rgb),0.08);
+  border-color: rgba(var(--primary-rgb),0.16);
 }
 
 .color-picker-shell {
@@ -661,32 +703,33 @@ img { max-width: 100%; }
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.9rem;
   border-radius: var(--radius);
   font-size: 0.875rem;
   font-weight: 700;
   cursor: pointer;
   border: 1px solid rgba(148, 169, 211, 0.24);
   text-decoration: none;
-  transition: background var(--transition), border-color var(--transition), color var(--transition), box-shadow var(--transition), transform var(--transition);
+  transition: background var(--transition), border-color var(--transition), color var(--transition), box-shadow var(--transition);
   white-space: nowrap;
   line-height: 1.25;
-  background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 100%);
+  background: var(--surface);
   color: #223556;
   border-color: rgba(151,177,255,0.24);
   box-shadow: 0 1px 0 rgba(255,255,255,0.75), 0 8px 18px rgba(27, 52, 98, 0.08);
+  min-height: 2.25rem;
 }
 
-.btn:hover { background: linear-gradient(180deg, #fafdff 0%, #eaf2ff 100%); text-decoration: none; box-shadow: 0 10px 22px rgba(27, 52, 98, 0.12); }
+.btn:hover { background: var(--surface-raised); text-decoration: none; box-shadow: 0 10px 22px rgba(27, 52, 98, 0.12); }
 .btn .material-symbols-outlined { font-size: 1.0625rem; }
 
-.btn-primary   { background: linear-gradient(90deg, var(--primary) 0%, #6b8cff 100%);  border-color: rgba(79,111,255,0.65);  color: var(--primary-text); }
-.btn-primary:hover { background: linear-gradient(90deg, var(--primary-hover) 0%, var(--primary) 100%); border-color: rgba(79,111,255,0.85); color: var(--primary-text); }
+.btn-primary   { background: var(--primary);  border-color: var(--primary);  color: var(--primary-text); }
+.btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); color: var(--primary-text); }
 
-.btn-danger    { background: linear-gradient(90deg, var(--danger) 0%, #e56f83 100%);   border-color: rgba(217,79,102,0.55);   color: #fff; }
-.btn-danger:hover { filter: brightness(0.98); }
+.btn-danger    { background: var(--danger);   border-color: var(--danger);   color: #fff; }
+.btn-danger:hover { filter: brightness(0.96); }
 
-.btn-success   { background: linear-gradient(90deg, var(--success) 0%, #28b98f 100%);  border-color: rgba(13,154,111,0.5);  color: #fff; }
+.btn-success   { background: var(--success);  border-color: var(--success);  color: #fff; }
 
 .btn-ghost {
   background: rgba(var(--primary-rgb), 0.08);
@@ -701,15 +744,51 @@ img { max-width: 100%; }
 
 .btn-lg { padding: 0.75rem 1.5rem; font-size: 1rem; }
 
+.btn-icon-only {
+  width: 2.25rem;
+  min-width: 2.25rem;
+  padding: 0;
+  justify-content: center;
+}
+
+.btn-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
 [data-theme="dark"] .btn {
-  background: linear-gradient(180deg, #18243d 0%, #13213a 100%);
+  background: var(--surface);
   color: #edf4ff;
   border-color: rgba(151,177,255,0.16);
   box-shadow: 0 8px 18px rgba(0,0,0,0.24);
 }
 
+[data-theme="dark"] .btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn-primary:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+[data-theme="dark"] .btn-success {
+  background: var(--success);
+  border-color: var(--success);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn-danger {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #ffffff;
+}
+
 [data-theme="dark"] .btn:hover {
-  background: linear-gradient(180deg, #1c2b49 0%, #162640 100%);
+  background: var(--surface-raised);
 }
 
 [data-theme="dark"] .btn-ghost {
@@ -727,6 +806,17 @@ img { max-width: 100%; }
   background: linear-gradient(180deg, #18243d 0%, #13213a 100%);
   color: var(--text);
   border-color: var(--border);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  color-scheme: dark;
+}
+
+[data-theme="dark"] input[type="checkbox"],
+[data-theme="dark"] input[type="radio"] {
+  accent-color: var(--primary);
 }
 
 /* ── Forms ───────────────────────────────────────── */
@@ -848,10 +938,11 @@ tr:hover td { background: var(--bg); }
 .badge-info    { background: var(--info); color: #ffffff; }
 .badge-neutral { background: var(--text-muted); color: #ffffff; }
 
-[data-theme="dark"] .badge-success { color: #6ee7b7; }
-[data-theme="dark"] .badge-warning { color: #fcd34d; }
-[data-theme="dark"] .badge-danger  { color: #fca5a5; }
-[data-theme="dark"] .badge-info    { color: #93c5fd; }
+[data-theme="dark"] .badge-success { color: #6ee7b7; background: rgba(13,154,111,0.25); }
+[data-theme="dark"] .badge-warning { color: #fcd34d; background: rgba(202,138,4,0.25); }
+[data-theme="dark"] .badge-danger  { color: #fca5a5; background: rgba(217,79,102,0.25); }
+[data-theme="dark"] .badge-info    { color: #93c5fd; background: rgba(var(--primary-rgb),0.25); }
+[data-theme="dark"] .badge-neutral { color: #c4d2ea; background: rgba(93,112,143,0.25); }
 
 /* ── Priority dots ───────────────────────────────── */
 .priority-dot {
@@ -884,6 +975,8 @@ tr:hover td { background: var(--bg); }
   color: var(--text-muted);
   cursor: pointer;
   border-top: 3px solid transparent;
+  border-left: none;
+  border-right: none;
   border-bottom: none;
   margin-bottom: 0;
   transition: color var(--transition), border-color var(--transition), background var(--transition);
@@ -894,7 +987,7 @@ tr:hover td { background: var(--bg); }
 
 .tab:hover { color: var(--text); text-decoration: none; }
 .tab.active { color: var(--primary); border-top-color: var(--primary); background: rgba(var(--primary-rgb), 0.08); }
-[data-theme="dark"] .tab.active { border-top-color: rgba(var(--primary-rgb), 0.25); background: rgba(var(--primary-rgb), 0.08); }
+[data-theme="dark"] .tab.active { border-top-color: var(--primary); background: rgba(var(--primary-rgb), 0.08); }
 .tab .material-symbols-outlined { font-size: 1rem; }
 
 /* ── Login page – modern split layout ───────────── */
@@ -1160,20 +1253,14 @@ tr:hover td { background: var(--bg); }
   background:
     repeating-linear-gradient(
       135deg,
-      rgba(255,255,255,0.18) 0,
-      rgba(255,255,255,0.18) 10px,
-      rgba(255,255,255,0.04) 10px,
-      rgba(255,255,255,0.04) 20px
+      color-mix(in srgb, var(--progress-tone) 25%, transparent) 0,
+      color-mix(in srgb, var(--progress-tone) 25%, transparent) 10px,
+      color-mix(in srgb, var(--progress-tone) 8%, transparent) 10px,
+      color-mix(in srgb, var(--progress-tone) 8%, transparent) 20px
     ),
-    linear-gradient(90deg, var(--progress-tone) 0%, color-mix(in srgb, var(--progress-tone) 62%, white) 100%);
-  background-size: 200% 100%, 100% 100%;
+    linear-gradient(90deg, var(--progress-tone) 0%, var(--progress-tone) 100%);
+  background-size: 100% 100%, 100% 100%;
   transition: width 0.4s ease;
-  animation: progress-stripes 1.1s linear infinite;
-}
-
-@keyframes progress-stripes {
-  from { background-position: 0 0, 0 0; }
-  to   { background-position: 40px 0, 0 0; }
 }
 
 /* ── Empty state ─────────────────────────────────── */
@@ -1383,13 +1470,6 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
 <div id="page-loader"></div>
 <div class="app">
   <div class="topbar">
-    <div class="topbar-left">
-      <span class="topbar-app">
-        <span class="material-symbols-outlined">dashboard</span>
-        Universal UI Template
-      </span>
-    </div>
-
     <nav class="topbar-nav" aria-label="Primary">
       <a href="#overview" class="nav-item active"><span class="material-symbols-outlined">home</span>Overview</a>
       <a href="#alerts" class="nav-item"><span class="material-symbols-outlined">notifications</span>Alerts</a>
@@ -1413,17 +1493,21 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
       <button id="theme-toggle" class="topbar-btn" title="Toggle theme">
         <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
       </button>
-      <span class="topbar-user">
-        <div class="topbar-avatar">UI</div>
-        <span class="topbar-user-meta">
-          <span class="topbar-username">Template User</span>
-          <span class="topbar-user-role">Design Lead</span>
-        </span>
-      </span>
-      <a href="#login" class="topbar-btn topbar-login" title="Show login page section">
-        <span class="material-symbols-outlined">login</span>
-        Login Page
-      </a>
+      <div class="profile-menu">
+        <button type="button" class="topbar-user profile-menu-toggle" id="profileMenuToggle" aria-haspopup="menu" aria-expanded="false">
+          <div class="topbar-avatar">UI</div>
+          <span class="topbar-user-meta">
+            <span class="topbar-username">Template User</span>
+            <span class="topbar-user-role">Design Lead</span>
+          </span>
+          <span class="material-symbols-outlined">expand_more</span>
+        </button>
+        <div class="profile-menu-list" id="profileMenu" role="menu">
+          <a class="profile-menu-item" href="#overview" role="menuitem"><span class="material-symbols-outlined">person</span>Profile</a>
+          <a class="profile-menu-item" href="#forms" role="menuitem"><span class="material-symbols-outlined">settings</span>Settings</a>
+          <a class="profile-menu-item" href="#login" role="menuitem"><span class="material-symbols-outlined">logout</span>Logout</a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1504,6 +1588,9 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
               <button class="btn btn-ghost">Ghost</button>
               <button class="btn btn-sm">Small</button>
               <button class="btn btn-lg">Large</button>
+              <button class="btn btn-primary btn-with-icon"><span class="material-symbols-outlined">add</span>Add Item</button>
+              <button class="btn btn-danger btn-with-icon"><span class="material-symbols-outlined">delete</span>Delete Item</button>
+              <button class="btn btn-icon-only" title="Icon only action"><span class="material-symbols-outlined">more_horiz</span></button>
             </div>
           </div>
         </div>
@@ -1578,7 +1665,6 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
                       <div class="form-hint">Use this richer input treatment for theme controls.</div>
                     </div>
                   </div>
-                  <div id="colorPreview" class="mt-2" style="height:2rem;border-radius:4px;background:#4f6fff;border:1px solid var(--border);"></div>
                 </div>
                 <div class="form-group">
                   <label for="file">File input</label>
@@ -1789,27 +1875,6 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
     });
   }
 
-  /* ── Mobile sidebar toggle ────────────────────── */
-  function initMobileMenu() {
-    const btn = document.getElementById('mobile-menu-btn');
-    const sidebar = document.querySelector('.sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
-
-    if (!btn || !sidebar) return;
-
-    btn.addEventListener('click', function () {
-      sidebar.classList.toggle('open');
-      if (overlay) overlay.classList.toggle('hidden');
-    });
-
-    if (overlay) {
-      overlay.addEventListener('click', function () {
-        sidebar.classList.remove('open');
-        overlay.classList.add('hidden');
-      });
-    }
-  }
-
   /* ── Auto-dismiss flash messages ─────────────── */
   function initFlash() {
     const flash = document.querySelectorAll('.alert[data-auto-dismiss]');
@@ -1859,9 +1924,9 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
     document.querySelectorAll('input[type="color"][data-preview]').forEach(function (inp) {
       const target = document.getElementById(inp.getAttribute('data-preview'));
       const valueTarget = document.getElementById(inp.getAttribute('data-value-target'));
-      if (!target) return;
+      if (!target && !valueTarget) return;
       function syncColor() {
-        target.style.background = inp.value;
+        if (target) target.style.background = inp.value;
         if (valueTarget) valueTarget.textContent = inp.value.toUpperCase();
       }
       inp.addEventListener('input', syncColor);
@@ -1929,7 +1994,6 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
 
     initTheme();
     initAlerts();
-    initMobileMenu();
     initFlash();
     initConfirm();
     initPasswordStrength();
@@ -1952,13 +2016,28 @@ document.addEventListener('DOMContentLoaded', function () {
   if (openBtn && dlg) openBtn.addEventListener('click', function(){ dlg.showModal(); });
   if (closeBtn && dlg) closeBtn.addEventListener('click', function(){ dlg.close(); });
 
-  /* Keep sidebar active state in demo */
+  /* Keep nav active state in demo */
   document.querySelectorAll('.nav-item').forEach(function (item) {
     item.addEventListener('click', function () {
       document.querySelectorAll('.nav-item').forEach(function (n) { n.classList.remove('active'); });
       item.classList.add('active');
     });
   });
+
+  const profileToggle = document.getElementById('profileMenuToggle');
+  const profileMenu = document.getElementById('profileMenu');
+  if (profileToggle && profileMenu) {
+    profileToggle.addEventListener('click', function () {
+      const open = profileMenu.classList.toggle('open');
+      profileToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.profile-menu')) {
+        profileMenu.classList.remove('open');
+        profileToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
 });
 </script>
 </body>
