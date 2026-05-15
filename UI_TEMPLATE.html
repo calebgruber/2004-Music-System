@@ -29,6 +29,8 @@
   --sidebar-hover:   #172540;
   --sidebar-accent:  #4f6fff;
   --sidebar-width:   240px;
+  --topbar-offset:   5.5rem;
+  --loader-width:    42%;
 
   --bg:              #edf4ff;
   --surface:         #ffffff;
@@ -117,7 +119,7 @@ img { max-width: 100%; }
   display: block;
   width: 100%;
   min-height: 100vh;
-  padding-top: 2.75rem; /* push below fixed topbar */
+  padding-top: var(--topbar-offset);
 }
 
 /* ── Top navigation bar ──────────────────────────── */
@@ -1231,6 +1233,7 @@ tr:hover td { background: var(--bg); }
 
   .page-header { padding: 1rem; }
   .page-body   { padding: 1rem; }
+  .app { padding-top: 7.5rem; }
   .topbar {
     padding-bottom: 0.25rem;
   }
@@ -1266,7 +1269,7 @@ tr:hover td { background: var(--bg); }
   top: 0;
   left: 0;
   height: 3px;
-  width: 42%;
+  width: var(--loader-width);
   background:
     repeating-linear-gradient(
       135deg,
