@@ -842,11 +842,11 @@ tr:hover td { background: var(--bg); }
   border: none;
 }
 
-.badge-success { background: rgba(13,154,111,0.25); color: var(--success); }
-.badge-warning { background: rgba(202,138,4,0.25); color: var(--warning); }
-.badge-danger  { background: rgba(217,79,102,0.25); color: var(--danger); }
-.badge-info    { background: rgba(var(--primary-rgb),0.25); color: var(--info); }
-.badge-neutral { background: rgba(93,112,143,0.18); color: var(--text-muted); }
+.badge-success { background: var(--success); color: #ffffff; }
+.badge-warning { background: var(--warning); color: #ffffff; }
+.badge-danger  { background: var(--danger); color: #ffffff; }
+.badge-info    { background: var(--info); color: #ffffff; }
+.badge-neutral { background: var(--text-muted); color: #ffffff; }
 
 [data-theme="dark"] .badge-success { color: #6ee7b7; }
 [data-theme="dark"] .badge-warning { color: #fcd34d; }
@@ -1467,7 +1467,7 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
       </div>
 
       <div class="card-grid" id="cards">
-        <div class="card" style="border-left:3px solid #3b82f6;--card-accent:#3b82f6;--card-accent-rgb:59,130,246;--card-text-on-solid:#ffffff">
+        <div class="card" style="border-left:5px solid #3b82f6;--card-accent:#3b82f6;--card-accent-rgb:59,130,246;--card-text-on-solid:#ffffff">
           <div class="card-top">
             <div class="card-tab"><span class="material-symbols-outlined">apps</span><h3>Base Card</h3></div>
             <div class="card-header-actions"><button class="btn btn-sm">Action</button></div>
@@ -1476,7 +1476,7 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
           <div class="card-footer"><button class="btn btn-sm">Cancel</button><button class="btn btn-sm btn-primary">Save</button></div>
         </div>
 
-        <div class="card" style="border-left:3px solid #10b981;--card-accent:#10b981;--card-accent-rgb:16,185,129;--card-text-on-solid:#ffffff">
+        <div class="card" style="border-left:5px solid #10b981;--card-accent:#10b981;--card-accent-rgb:16,185,129;--card-text-on-solid:#ffffff">
           <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">query_stats</span><h3>Progress + Badges</h3></div></div>
           <div class="card-body">
             <div class="flex gap-2 mb-4">
@@ -1492,7 +1492,7 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
           </div>
         </div>
 
-        <div class="card" style="border-left:3px solid #f59e0b;--card-accent:#f59e0b;--card-accent-rgb:245,158,11;--card-text-on-solid:#000000">
+        <div class="card" style="border-left:5px solid #f59e0b;--card-accent:#f59e0b;--card-accent-rgb:245,158,11;--card-text-on-solid:#000000">
           <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">smart_button</span><h3>Buttons</h3></div></div>
           <div class="card-body" id="buttons">
             <div class="demo-section-title">Sizes + variants</div>
@@ -1508,7 +1508,7 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
           </div>
         </div>
 
-        <div class="card card-full" style="border-left:3px solid #6366f1;--card-accent:#6366f1;--card-accent-rgb:99,102,241;--card-text-on-solid:#ffffff" id="forms">
+        <div class="card card-full" style="border-left:5px solid #6366f1;--card-accent:#6366f1;--card-accent-rgb:99,102,241;--card-text-on-solid:#ffffff" id="forms">
           <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">edit_note</span><h3>Forms (all core controls)</h3></div></div>
           <div class="card-body">
             <form>
@@ -1594,7 +1594,7 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
           </div>
         </div>
 
-        <div class="card card-full" style="border-left:3px solid #8b5cf6;--card-accent:#8b5cf6;--card-accent-rgb:139,92,246;--card-text-on-solid:#ffffff" id="tables">
+        <div class="card card-full" style="border-left:5px solid #8b5cf6;--card-accent:#8b5cf6;--card-accent-rgb:139,92,246;--card-text-on-solid:#ffffff" id="tables">
           <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">table</span><h3>Data Table + Priority Dots</h3></div></div>
           <div class="card-body table-wrap">
             <table>
@@ -1610,7 +1610,7 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
           </div>
         </div>
 
-        <div class="card card-full" style="border-left:3px solid #ef4444;--card-accent:#ef4444;--card-accent-rgb:239,68,68;--card-text-on-solid:#ffffff" id="tabs">
+        <div class="card card-full" style="border-left:5px solid #ef4444;--card-accent:#ef4444;--card-accent-rgb:239,68,68;--card-text-on-solid:#ffffff" id="tabs">
           <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">tab</span><h3>Tabs + Dynamic Rows</h3></div></div>
           <div class="card-body">
             <div class="tabs">
@@ -1651,7 +1651,7 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
         </div>
       </div>
 
-      <div class="card mt-4" style="border-left:3px solid #3b82f6;--card-accent:#3b82f6;--card-accent-rgb:59,130,246;--card-text-on-solid:#ffffff" id="apps">
+      <div class="card mt-4" style="border-left:5px solid #3b82f6;--card-accent:#3b82f6;--card-accent-rgb:59,130,246;--card-text-on-solid:#ffffff" id="apps">
         <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">apps</span><h3>App Tiles</h3></div></div>
         <div class="card-body">
           <div class="apps-grid">
@@ -1664,7 +1664,7 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
         </div>
       </div>
 
-      <div class="card mt-4" style="border-left:3px solid #10b981;--card-accent:#10b981;--card-accent-rgb:16,185,129;--card-text-on-solid:#ffffff" id="schedule">
+      <div class="card mt-4" style="border-left:5px solid #10b981;--card-accent:#10b981;--card-accent-rgb:16,185,129;--card-text-on-solid:#ffffff" id="schedule">
         <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">calendar_month</span><h3>Schedule Grid</h3></div></div>
         <div class="card-body">
           <div class="schedule-grid">
@@ -1680,7 +1680,7 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
       </div>
 
       <div class="demo-grid-2 mt-4" id="empty">
-        <div class="card" style="border-left:3px solid #64748b;--card-accent:#64748b;--card-accent-rgb:100,116,139;--card-text-on-solid:#ffffff">
+        <div class="card" style="border-left:5px solid #64748b;--card-accent:#64748b;--card-accent-rgb:100,116,139;--card-text-on-solid:#ffffff">
           <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">inbox</span><h3>Empty State</h3></div></div>
           <div class="card-body">
             <div class="empty-state">
@@ -1690,7 +1690,7 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
             </div>
           </div>
         </div>
-        <div class="card" style="border-left:3px solid #f59e0b;--card-accent:#f59e0b;--card-accent-rgb:245,158,11;--card-text-on-solid:#000000">
+        <div class="card" style="border-left:5px solid #f59e0b;--card-accent:#f59e0b;--card-accent-rgb:245,158,11;--card-text-on-solid:#000000">
           <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">palette</span><h3>Class Chips</h3></div></div>
           <div class="card-body">
             <span class="class-chip" style="background:#dbeafe;color:#1d4ed8">Blue Chip</span>
@@ -1700,7 +1700,7 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
         </div>
       </div>
 
-      <div class="card mt-4" style="border-left:3px solid #6366f1;--card-accent:#6366f1;--card-accent-rgb:99,102,241;--card-text-on-solid:#ffffff" id="login">
+      <div class="card mt-4" style="border-left:5px solid #6366f1;--card-accent:#6366f1;--card-accent-rgb:99,102,241;--card-text-on-solid:#ffffff" id="login">
         <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">login</span><h3>Login Components</h3></div></div>
         <div class="card-body">
           <div class="login-card">
@@ -1724,7 +1724,7 @@ table tbody tr:nth-child(10) { animation-delay: 0.20s; }
         </div>
       </div>
 
-      <div class="card mt-4" style="border-left:3px solid #ef4444;--card-accent:#ef4444;--card-accent-rgb:239,68,68;--card-text-on-solid:#ffffff" id="extras">
+      <div class="card mt-4" style="border-left:5px solid #ef4444;--card-accent:#ef4444;--card-accent-rgb:239,68,68;--card-text-on-solid:#ffffff" id="extras">
         <div class="card-top"><div class="card-tab"><span class="material-symbols-outlined">extension</span><h3>Extras (Dialog, Loader trigger, Keyboard tags)</h3></div></div>
         <div class="card-body">
           <div class="flex gap-2" style="flex-wrap:wrap;align-items:center;">
